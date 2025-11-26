@@ -9,8 +9,11 @@ const io = require("socket.io")(http, {
 });
 
 let mutedUsers = new Set();
+let onlineUsers = 0;
 
 io.on("connection", (socket) => {
+  onlineUsers++;
+  io.emit("onlineCount", onlineUsers);
 
   socket.on("userConnected", (userId) => {
     socket.data.userId = userId;
@@ -47,8 +50,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     const uid = socket.data.userId;
     if (uid) io.emit("userLeft", uid);
+    onlineUsers--;
+    io.emit("onlineCount", onlineUsers);
   });
-
 });
 
 http.listen(3000, () => {
