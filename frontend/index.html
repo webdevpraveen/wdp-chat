@@ -1,162 +1,212 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Live Chat</title>
-    <meta charset="UTF-8" />
+    <title>WDP Live Chat</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-        body { font-family: Arial; margin: 20px; }
-        #messages {
-            list-style: none;
-            padding: 0;
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-            padding: 10px;
+        :root{
+            --bg:#f7f9fc;
+            --panel:#ffffff;
+            --self:#d4f8d4;
+            --other:#dbe9ff;
+            --admin:#ffe6e6;
+            --muted:#9aa3b2;
+            --accent:#2b7cff;
+            --text:#222;
+            --radius:14px;
         }
-        #messages li {
-            margin: 5px 0;
-            padding: 8px;
-            background: #eee;
-            border-radius: 6px;
+        body{
+            margin:0; background:var(--bg);
+            font-family:Inter,Arial; display:flex;
+            align-items:center; justify-content:center;
+            height:100vh;
         }
-        #adminPanel {
-            border: 2px solid red;
-            padding: 10px;
-            margin-bottom: 20px;
-            display: none;
-            background: #ffeeee;
+        .chat{
+            width:100%; max-width:720px; height:90vh;
+            background:var(--panel);
+            border-radius:12px;
+            overflow:hidden;
+            display:flex; flex-direction:column;
         }
-        #typingStatus {
-            color: gray;
-            margin: 5px 0;
-            height: 18px;
+        .header{
+            padding:12px 16px; border-bottom:1px solid #eee;
+            display:flex; justify-content:space-between; align-items:center;
+        }
+        .messages{
+            flex:1; overflow-y:auto; padding:16px;
+            display:flex; flex-direction:column; gap:10px;
+        }
+        .event{
+            text-align:center; color:var(--muted);
+            font-size:13px;
+        }
+        .row{ display:flex; }
+        .left{ justify-content:flex-start; }
+        .right{ justify-content:flex-end; }
+        .bubble{
+            max-width:70%; padding:10px 14px; border-radius:var(--radius);
+            font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.05);
+        }
+        .self{ background:var(--self); }
+        .other{ background:var(--other); }
+        .admin{
+            background:var(--admin); border-left:4px solid #ff6b6b;
+            font-weight:600;
+        }
+        .meta{ font-size:12px; color:var(--muted); margin-bottom:4px; }
+        .composer{
+            padding:12px; display:flex; gap:10px; border-top:1px solid #eee;
+        }
+        .composer input{
+            flex:1; padding:10px 12px; border-radius:10px;
+            border:1px solid #ddd;
+        }
+        .composer button{
+            padding:10px 16px; border:none;
+            background:var(--accent); color:#fff;
+            border-radius:10px; cursor:pointer;
+        }
+        #typingStatus{ padding:0 16px; color:var(--muted); height:18px; }
+        #adminPanel button{
+            margin-left:6px; padding:6px 10px; border-radius:6px;
+            border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px;
         }
     </style>
 </head>
 <body>
 
-    <h2>WDP Live Group Chat</h2>
-
-    <!-- ADMIN PANEL -->
-    <div id="adminPanel">
-        <h3>Admin Panel</h3>
-        <button id="clearChat">Clear Chat</button>
-        <button id="muteAll">Mute All</button>
-        <button id="unmuteAll">Unmute All</button>
+<div class="chat">
+    <div class="header">
+        <div>WDP Live Chat</div>
+        <div id="adminPanel"></div>
     </div>
 
-    <!-- CHAT UI -->
-    <ul id="messages"></ul>
-
+    <div class="messages" id="messages"></div>
     <div id="typingStatus"></div>
 
-    <input id="input" autocomplete="off" placeholder="Type your message..." />
-    <button id="send">Send</button>
+    <div class="composer">
+        <input id="input" placeholder="Type..." />
+        <button id="send">Send</button>
+    </div>
+</div>
 
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<audio id="notifSound" src="notification.mp3" preload="auto"></audio>
 
-    <script>
-        // ----- ADMIN CHECK -----
-        const query = new URLSearchParams(window.location.search);
-        const isAdmin = query.get("admin") === "supersecret123";
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const query = new URLSearchParams(window.location.search);
+const isAdmin = query.get("admin") === "supersecret123";
 
-        if (isAdmin) {
-            document.getElementById("adminPanel").style.display = "block";
-        }
+if (isAdmin) {
+    adminPanel.innerHTML = `
+        <button id="clearChat">Clear</button>
+        <button id="muteAll">Mute</button>
+        <button id="unmuteAll">Unmute</button>`;
+}
 
-        // ----- RANDOM USER ID -----
-        let userId = localStorage.getItem("userId");
-        if (!userId) {
-            userId = "User-" + Math.floor(10000 + Math.random() * 90000);
-            localStorage.setItem("userId", userId);
-        }
+let userId = localStorage.getItem("userId");
+if (!userId) {
+    userId = "User-" + Math.floor(10000 + Math.random() * 90000);
+    localStorage.setItem("userId", userId);
+}
 
-        // ----- SOCKET CONNECTION -----
-        const socket = io("https://wdp-chat.onrender.com");
+const socket = io("https://wdp-chat.onrender.com");
 
-        const input = document.getElementById("input");
-        const messages = document.getElementById("messages");
-        const typingStatus = document.getElementById("typingStatus");
+socket.on("connect", () => {
+    socket.emit("userConnected", userId);
+});
 
-        // ----- SEND MESSAGE -----
-        document.getElementById("send").onclick = () => {
-            if (input.value.trim()) {
-                socket.emit("chatMessage", {
-                    userId,
-                    text: input.value,
-                    isAdmin: isAdmin
-                });
-                input.value = "";
-                socket.emit("stopTyping", userId);
-            }
-        };
+const input = document.getElementById("input");
+const messages = document.getElementById("messages");
+const typingStatus = document.getElementById("typingStatus");
+const notif = document.getElementById("notifSound");
 
-        // ----- RECEIVE MESSAGE -----
-        socket.on("chatMessage", (msg) => {
-            const li = document.createElement("li");
+function scrollBottom(){ messages.scrollTop = messages.scrollHeight; }
 
-            if (msg.isAdmin) {
-                li.style.background = "#ffeb3b";  // yellow admin bubble
-                li.style.borderLeft = "5px solid #ff9800"; // orange strip
-                li.textContent = `👑 Admin (${msg.userId}): ${msg.text}`;
-            } else {
-                li.textContent = `${msg.userId}: ${msg.text}`;
-            }
+function eventMsg(text){
+    const d = document.createElement("div");
+    d.className = "event";
+    d.textContent = text;
+    messages.appendChild(d);
+    scrollBottom();
+}
 
-            messages.appendChild(li);
-        });
+function bubble(msg){
+    const row = document.createElement("div");
+    row.className = "row " + (msg.userId === userId ? "right" : "left");
 
-        // ----- TYPING DETECTION -----
-        let typingTimeout;
+    const b = document.createElement("div");
+    b.className = "bubble " +
+        (msg.isAdmin ? "admin" :
+        msg.userId === userId ? "self" : "other");
 
-        input.addEventListener("input", () => {
-            socket.emit("typing", userId);
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.textContent =
+        msg.isAdmin ? "👑 Admin ("+msg.userId+")" :
+        msg.userId === userId ? "You" : msg.userId;
 
-            clearTimeout(typingTimeout);
-            typingTimeout = setTimeout(() => {
-                socket.emit("stopTyping", userId);
-            }, 400);
-        });
+    const body = document.createElement("div");
+    body.textContent = msg.text;
 
-        // SHOW "typing..."
-        socket.on("userTyping", (uid) => {
-            typingStatus.textContent = uid + " is typing...";
-        });
+    b.appendChild(meta);
+    b.appendChild(body);
+    row.appendChild(b);
+    messages.appendChild(row);
+    scrollBottom();
+}
 
-        socket.on("userStopTyping", () => {
-            typingStatus.textContent = "";
-        });
+send.onclick = () => {
+    const val = input.value.trim();
+    if (!val) return;
+    socket.emit("chatMessage", {
+        userId,
+        text: val,
+        isAdmin
+    });
+    input.value = "";
+    socket.emit("stopTyping", userId);
+};
 
-        // ----- ADMIN BUTTON LOGIC -----
-        if (isAdmin) {
-            document.getElementById("clearChat").onclick = () => {
-                socket.emit("adminClearChat");
-            };
+input.addEventListener("keydown", (e)=> {
+    if (e.key === "Enter") send.onclick();
+});
 
-            document.getElementById("muteAll").onclick = () => {
-                socket.emit("adminMuteAll");
-            };
+socket.on("chatMessage", (msg) => {
+    bubble(msg);
+    if (msg.userId !== userId) {
+        try { notif.currentTime=0; notif.play(); } catch(e){}
+    }
+});
 
-            document.getElementById("unmuteAll").onclick = () => {
-                socket.emit("adminUnmuteAll");
-            };
-        }
+let typingTimer;
+input.addEventListener("input", () => {
+    socket.emit("typing", userId);
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(()=> socket.emit("stopTyping", userId), 600);
+});
 
-        // ----- CLEAR CHAT FOR ALL -----
-        socket.on("clearChatNow", () => {
-            messages.innerHTML = "";
-        });
+socket.on("userTyping", (uid) => {
+    if (uid !== userId) typingStatus.textContent = uid + " is typing...";
+});
+socket.on("userStopTyping", () => typingStatus.textContent = "");
 
-        // ----- MUTE / UNMUTE ALERTS -----
-        socket.on("muteAllNow", () => {
-            alert("Admin stop all users to send msgs.");
-        });
+socket.on("userJoined", (uid)=> eventMsg("🟢 "+uid+" joined"));
+socket.on("userLeft", (uid)=> eventMsg("🔴 "+uid+" left"));
 
-        socket.on("unmuteAllNow", () => {
-            alert("Admin allow everyone to send msgs.");
-        });
-    </script>
+if (isAdmin) {
+    clearChat.onclick = ()=> socket.emit("adminClearChat");
+    muteAll.onclick = ()=> socket.emit("adminMuteAll");
+    unmuteAll.onclick = ()=> socket.emit("adminUnmuteAll");
+}
+
+socket.on("clearChatNow", ()=> messages.innerHTML = "");
+socket.on("muteAllNow", ()=> eventMsg("🔇 All users muted"));
+socket.on("unmuteAllNow", ()=> eventMsg("🔊 Users unmuted"));
+
+eventMsg("You are: "+userId + (isAdmin ? " (admin)" : ""));
+</script>
 
 </body>
 </html>
