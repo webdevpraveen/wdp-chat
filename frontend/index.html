@@ -43,8 +43,7 @@
             localStorage.setItem("userId", userId);
         }
 
-        // IMPORTANT: Is URL ko baad me change karenge Render backend URL se
-        const socket = io("http://localhost:3000");
+        const socket = io("https://wdp-chat.onrender.com");
 
         const input = document.getElementById("input");
         const messages = document.getElementById("messages");
