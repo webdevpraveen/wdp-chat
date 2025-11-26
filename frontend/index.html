@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WDP-Chat</title>
+    <title>College Chat</title>
     <meta charset="UTF-8" />
     <style>
-        body {
-            font-family: Arial;
-            margin: 20px;
-        }
+        body { font-family: Arial; margin: 20px; }
         #messages {
             list-style: none;
             padding: 0;
@@ -23,12 +20,36 @@
             background: #eee;
             border-radius: 6px;
         }
+        #adminPanel {
+            border: 2px solid red;
+            padding: 10px;
+            margin-bottom: 20px;
+            display: none;
+            background: #ffeeee;
+        }
+        #typingStatus {
+            color: gray;
+            margin: 5px 0;
+            height: 18px;
+        }
     </style>
 </head>
 <body>
 
-    <h2>SRMU Chat (Live)</h2>
+    <h2>SRMU Live Group Chat</h2>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel">
+        <h3>Admin Panel</h3>
+        <button id="clearChat">Clear Chat</button>
+        <button id="muteAll">Mute All</button>
+        <button id="unmuteAll">Unmute All</button>
+    </div>
+
+    <!-- CHAT UI -->
     <ul id="messages"></ul>
+
+    <div id="typingStatus"></div>
 
     <input id="input" autocomplete="off" placeholder="Type your message..." />
     <button id="send">Send</button>
@@ -36,18 +57,29 @@
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
     <script>
-        // Random User ID (same stays until browser cleared)
+        // ----- ADMIN CHECK -----
+        const query = new URLSearchParams(window.location.search);
+        const isAdmin = query.get("admin") === "supersecret123";
+
+        if (isAdmin) {
+            document.getElementById("adminPanel").style.display = "block";
+        }
+
+        // ----- RANDOM USER ID -----
         let userId = localStorage.getItem("userId");
         if (!userId) {
             userId = "User-" + Math.floor(10000 + Math.random() * 90000);
             localStorage.setItem("userId", userId);
         }
 
+        // ----- SOCKET CONNECTION -----
         const socket = io("https://wdp-chat.onrender.com");
 
         const input = document.getElementById("input");
         const messages = document.getElementById("messages");
+        const typingStatus = document.getElementById("typingStatus");
 
+        // ----- SEND MESSAGE -----
         document.getElementById("send").onclick = () => {
             if (input.value.trim()) {
                 socket.emit("chatMessage", {
@@ -55,13 +87,65 @@
                     text: input.value
                 });
                 input.value = "";
+                socket.emit("stopTyping", userId);
             }
         };
 
+        // ----- RECEIVE MESSAGE -----
         socket.on("chatMessage", (msg) => {
             const li = document.createElement("li");
             li.textContent = `${msg.userId}: ${msg.text}`;
             messages.appendChild(li);
+        });
+
+        // ----- TYPING DETECTION -----
+        let typingTimeout;
+
+        input.addEventListener("input", () => {
+            socket.emit("typing", userId);
+
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => {
+                socket.emit("stopTyping", userId);
+            }, 400);
+        });
+
+        // SHOW "typing..."
+        socket.on("userTyping", (uid) => {
+            typingStatus.textContent = uid + " is typing...";
+        });
+
+        socket.on("userStopTyping", () => {
+            typingStatus.textContent = "";
+        });
+
+        // ----- ADMIN BUTTON LOGIC -----
+        if (isAdmin) {
+            document.getElementById("clearChat").onclick = () => {
+                socket.emit("adminClearChat");
+            };
+
+            document.getElementById("muteAll").onclick = () => {
+                socket.emit("adminMuteAll");
+            };
+
+            document.getElementById("unmuteAll").onclick = () => {
+                socket.emit("adminUnmuteAll");
+            };
+        }
+
+        // ----- CLEAR CHAT FOR ALL -----
+        socket.on("clearChatNow", () => {
+            messages.innerHTML = "";
+        });
+
+        // ----- MUTE / UNMUTE ALERTS -----
+        socket.on("muteAllNow", () => {
+            alert("Admin muted all users.");
+        });
+
+        socket.on("unmuteAllNow", () => {
+            alert("Admin unmuted everyone.");
         });
     </script>
 
