@@ -17,34 +17,37 @@ let mutedUsers = new Set();
 io.on("connection", (socket) => {
   console.log("User connected");
 
+  // ---- TYPING EVENTS ----
   socket.on("typing", (userId) => {
     socket.broadcast.emit("userTyping", userId);
-});
+  });
 
-socket.on("stopTyping", (userId) => {
+  socket.on("stopTyping", (userId) => {
     socket.broadcast.emit("userStopTyping", userId);
-});
+  });
 
-  // Normal message
+  // ---- NORMAL MESSAGE ----
   socket.on("chatMessage", (msg) => {
-    if (mutedUsers.has(msg.userId)) return; 
+    // If "all" muted OR specific userID muted => block message
+    if (mutedUsers.has("all") || mutedUsers.has(msg.userId)) return;
+
     io.emit("chatMessage", msg);
   });
 
-  // ADMIN: Clear chat
+  // ---- ADMIN: CLEAR CHAT ----
   socket.on("adminClearChat", () => {
     io.emit("clearChatNow");
   });
 
-  // ADMIN: Mute all
+  // ---- ADMIN: MUTE ALL ----
   socket.on("adminMuteAll", () => {
-    mutedUsers = new Set(["all"]);
+    mutedUsers.add("all");
     io.emit("muteAllNow");
   });
 
-  // ADMIN: Unmute all
+  // ---- ADMIN: UNMUTE ALL ----
   socket.on("adminUnmuteAll", () => {
-    mutedUsers = new Set();
+    mutedUsers.clear();
     io.emit("unmuteAllNow");
   });
 
