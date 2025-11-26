@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WDP-Chat</title>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
+        #messages {
+            list-style: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        #messages li {
+            margin: 5px 0;
+            padding: 8px;
+            background: #eee;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>SRMU Chat (Live)</h2>
+    <ul id="messages"></ul>
+
+    <input id="input" autocomplete="off" placeholder="Type your message..." />
+    <button id="send">Send</button>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <script>
+        // Random User ID (same stays until browser cleared)
+        let userId = localStorage.getItem("userId");
+        if (!userId) {
+            userId = "User-" + Math.floor(10000 + Math.random() * 90000);
+            localStorage.setItem("userId", userId);
+        }
+
+        // IMPORTANT: Is URL ko baad me change karenge Render backend URL se
+        const socket = io("http://localhost:3000");
+
+        const input = document.getElementById("input");
+        const messages = document.getElementById("messages");
+
+        document.getElementById("send").onclick = () => {
+            if (input.value.trim()) {
+                socket.emit("chatMessage", {
+                    userId,
+                    text: input.value
+                });
+                input.value = "";
+            }
+        };
+
+        socket.on("chatMessage", (msg) => {
+            const li = document.createElement("li");
+            li.textContent = `${msg.userId}: ${msg.text}`;
+            messages.appendChild(li);
+        });
+    </script>
+
+</body>
+</html>
