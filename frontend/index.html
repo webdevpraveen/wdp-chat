@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>College Chat</title>
+    <title>Live Chat</title>
     <meta charset="UTF-8" />
     <style>
         body { font-family: Arial; margin: 20px; }
@@ -36,7 +36,7 @@
 </head>
 <body>
 
-    <h2>SRMU Live Group Chat</h2>
+    <h2>WDP Live Group Chat</h2>
 
     <!-- ADMIN PANEL -->
     <div id="adminPanel">
@@ -84,7 +84,8 @@
             if (input.value.trim()) {
                 socket.emit("chatMessage", {
                     userId,
-                    text: input.value
+                    text: input.value,
+                    isAdmin: isAdmin
                 });
                 input.value = "";
                 socket.emit("stopTyping", userId);
@@ -94,7 +95,15 @@
         // ----- RECEIVE MESSAGE -----
         socket.on("chatMessage", (msg) => {
             const li = document.createElement("li");
-            li.textContent = `${msg.userId}: ${msg.text}`;
+
+            if (msg.isAdmin) {
+                li.style.background = "#ffeb3b";  // yellow admin bubble
+                li.style.borderLeft = "5px solid #ff9800"; // orange strip
+                li.textContent = `👑 Admin (${msg.userId}): ${msg.text}`;
+            } else {
+                li.textContent = `${msg.userId}: ${msg.text}`;
+            }
+
             messages.appendChild(li);
         });
 
@@ -141,11 +150,11 @@
 
         // ----- MUTE / UNMUTE ALERTS -----
         socket.on("muteAllNow", () => {
-            alert("Admin muted all users.");
+            alert("Admin stop all users to send msgs.");
         });
 
         socket.on("unmuteAllNow", () => {
-            alert("Admin unmuted everyone.");
+            alert("Admin allow everyone to send msgs.");
         });
     </script>
 
