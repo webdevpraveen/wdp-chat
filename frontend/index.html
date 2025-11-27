@@ -54,7 +54,7 @@
             background:var(--admin); border-left:4px solid #ff6b6b;
             font-weight:600;
         }
-        .meta{ font-size:12px; color:var(--muted); margin-bottom:4px; }
+        .meta{ font-size:12px; color:var(--muted); margin-bottom:4px; display:flex; justify-content:space-between; gap:8px; align-items:center; }
         .composer{
             padding:12px; display:flex; gap:10px; border-top:1px solid #eee;
         }
@@ -72,6 +72,7 @@
             margin-left:6px; padding:6px 10px; border-radius:6px;
             border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px;
         }
+        .time{ font-size:11px; color:var(--muted); margin-left:8px; }
     </style>
 </head>
 <body>
@@ -79,7 +80,7 @@
 <div class="chat">
 
     <div class="header">
-        <div>Live Chat •‌ ‌‌ <span id="onlineCount">0 online</span></div>
+        <div>WDP Live Chat • <span id="onlineCount">0 online</span></div>
 
         <div style="display:flex; gap:16px; align-items:center;">
             <a href="https://github.com/webdevpraveen" target="_blank"
@@ -108,7 +109,7 @@
     <div id="typingStatus"></div>
 
     <div class="composer">
-        <input id="input" placeholder="Type your message..." />
+        <input id="input" placeholder="Type..." />
         <button id="send">Send</button>
     </div>
 
@@ -166,11 +167,12 @@ function bubble(msg){
 
     const meta = document.createElement("div");
     meta.className = "meta";
-    meta.textContent =
-        msg.isAdmin ? "👑 Admin ("+msg.userId+")" :
-        msg.userId === userId ? "You" : msg.userId;
+    meta.innerHTML =
+        (msg.isAdmin ? "👑 Admin ("+msg.userId+")" :
+        msg.userId === userId ? "You" : msg.userId)
+        + '<span class="time">'+(msg.timestamp || '')+'</span>';
 
-    const body = document.createElement("div");
+    const body = document.createElement('div');
     body.textContent = msg.text;
 
     b.appendChild(meta);
