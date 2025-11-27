@@ -18,7 +18,8 @@ body{
   margin:0; background:var(--bg);
   font-family:Inter,Arial;
   display:flex; justify-content:center; align-items:center;
-  height:100vh; color:var(--text);
+  height:100vh;
+  color:var(--text);
 }
 .chat{
   width:100%; max-width:980px; height:92vh;
@@ -37,7 +38,6 @@ body{
   gap:6px;
   border-bottom:1px solid #e5eaf0;
 }
-
 .title-row{
   width:100%;
   display:flex;
@@ -45,99 +45,90 @@ body{
   align-items:center;
   gap:12px;
 }
-
 .app-title{
   font-size:20px;
   font-weight:700;
-  text-align:center;
 }
-
 .github-icon{
-  width:36px;
-  height:36px;
+  width:36px; height:36px;
   border-radius:50%;
   background:#fff;
   box-shadow:0 2px 8px rgba(0,0,0,0.08);
   display:flex;
-  align-items:center;
-  justify-content:center;
+  align-items:center; justify-content:center;
 }
-
 .you-are{
+  width:100%;
   font-size:14px;
   color:var(--muted);
-  width:100%;
   text-align:left;
 }
-
 .status-row{
   width:100%;
   display:flex;
   justify-content:flex-end;
-  margin-top:-4px;
 }
-
 .online-box{
   padding:6px 12px;
-  border:1px solid #e5eaf0;
-  border-radius:10px;
   background:#fff;
-  font-size:14px;
-  font-weight:600;
+  border-radius:10px;
+  border:1px solid #e5eaf0;
   cursor:pointer;
+  font-weight:600;
 }
 
 .popup{
   position:absolute;
-  right:16px;
-  top:100px;
+  right:16px; top:100px;
   width:240px;
   background:#fff;
   border-radius:10px;
-  box-shadow:0 14px 40px rgba(0,0,0,0.15);
+  box-shadow:0 12px 40px rgba(0,0,0,0.15);
   display:none;
   z-index:50;
 }
-
 .popup-header{
   padding:10px 12px;
-  font-weight:600;
   border-bottom:1px solid #eee;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  display:flex; justify-content:space-between; align-items:center;
+  font-weight:600;
 }
-
 .close-btn{
   cursor:pointer;
   font-size:18px;
-  line-height:18px;
 }
-
 .popup-list div{
   padding:8px 12px;
   border-bottom:1px solid #f5f5f5;
 }
 
-.messages{
-  flex:1;
-  overflow:auto;
-  padding:18px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+.admin-panel{
+  padding:10px;
+  display:flex; gap:8px;
+  border-bottom:1px solid #e5eaf0;
+  display:none;
 }
-
-.event{
-  text-align:center;
-  color:var(--muted);
+.admin-panel button{
+  padding:6px 12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  background:#fff;
+  cursor:pointer;
   font-size:13px;
 }
 
-.msg-row{
-  display:flex;
+.messages{
+  flex:1; padding:18px;
+  overflow:auto;
+  display:flex; flex-direction:column;
+  gap:12px;
+}
+.event{
+  text-align:center; font-size:13px;
+  color:var(--muted);
 }
 
+.msg-row{ display:flex; }
 .left{ justify-content:flex-start; }
 .right{ justify-content:flex-end; }
 
@@ -148,81 +139,84 @@ body{
   font-size:14px;
   box-shadow:0 4px 16px rgba(0,0,0,0.06);
 }
-
 .self{ background:var(--self); }
 .other{ background:var(--other); }
 .admin{ background:var(--admin); border-left:4px solid #ff6b6b; }
 .welcome{ background:var(--welcome); }
 
 .meta{
-  display:flex;
-  justify-content:space-between;
+  display:flex; justify-content:space-between;
   margin-bottom:6px;
   font-size:12px;
-  color:var(--muted);
 }
 
 .typing{
   height:18px;
-  padding-left:18px;
+  padding-left:16px;
   color:var(--muted);
 }
 
 .composer{
   padding:12px;
+  display:flex; gap:10px;
   border-top:1px solid #e5eaf0;
-  display:flex;
-  gap:10px;
 }
-
 .composer input{
   flex:1;
   padding:12px 16px;
   border-radius:999px;
   border:1px solid #cfd6df;
-  outline:none;
   font-size:15px;
 }
-
 .composer button{
   background:var(--accent);
   padding:10px 18px;
-  border-radius:999px;
   border:none;
-  color:white;
+  border-radius:999px;
   font-weight:600;
+  color:#fff;
   cursor:pointer;
 }
 
-.admin-panel{
-  padding:10px;
+.emoji-btn{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#fff;
+  border:1px solid #d7dce3;
   display:flex;
-  gap:8px;
-  border-bottom:1px solid #e5eaf0;
-  display:none;
-}
-
-.admin-panel button{
-  padding:6px 12px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  background:white;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
+  font-size:22px;
 }
 
-@media(max-width:600px){
-  .app-title{ font-size:18px; }
-  .github-icon{ width:30px;height:30px; }
+.emoji-popup{
+  position:absolute;
+  bottom:80px;
+  left:20px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:10px;
+  display:none;
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+}
+.emoji-popup span{
+  font-size:24px;
+  padding:6px;
+  display:inline-block;
+  cursor:pointer;
 }
 </style>
 </head>
+
 
 <body>
 
 <div class="chat">
 
   <div class="header">
-
     <div class="title-row">
       <div class="app-title">SRMU Web Chat</div>
 
@@ -230,15 +224,22 @@ body{
         <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
           <path d="M8 0C3.58 0 0 3.58 0 8a8 
           8 0 005.47 7.59c.4.07.55-.17.55-.38 
-          0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
-          -.01-.53.63-.01 1.08.58 1.23.82.72 
-          1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 
-          0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 
-          0 0 .67-.21 2.2.82a7.65 7.65 0 
-          012 0c1.53-1.04 2.2-.82 2.2-.82.44 
-          1.1.16 1.92.08 2.12.51.56.82 1.27.82 
-          2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 
-          1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 
+          0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69 -.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53 
+          .63-.01 1.08.58 1.23.82 
+          .72 1.21 1.87.87 2.33.66 
+          .07-.52.28-.87.51-1.07 
+          -1.78-.2-3.64-.89-3.64-3.95 
+          0-.87.31-1.59.82-2.15 
+          -.08-.2-.36-1.02.08-2.12 
+          0 0 .67-.21 2.2.82 
+          a7.65 7.65 0 012 0 
+          c1.53-1.04 2.2-.82 2.2-.82 
+          .44 1.1.16 1.92.08 2.12 
+          .51.56.82 1.27.82 2.15 
+          0 3.07-1.87 3.75-3.65 3.95 
+          .29.25.54.73.54 1.48 
+          0 1.07-.01 1.93-.01 2.2 
+          0 .21.15.46.55.38A8 
           8 0 0016 8c0-4.42-3.58-8-8-8z"/>
         </svg>
       </a>
@@ -249,9 +250,7 @@ body{
     <div class="status-row">
       <div id="onlineBox" class="online-box">0 online</div>
     </div>
-
   </div>
-
 
   <div id="popup" class="popup">
     <div class="popup-header">
@@ -261,18 +260,25 @@ body{
     <div id="popupList" class="popup-list"></div>
   </div>
 
-
-  <div class="admin-panel" id="adminPanel">
+  <div id="adminPanel" class="admin-panel">
     <button id="clearChat">Clear</button>
     <button id="muteAll">Mute</button>
     <button id="unmuteAll">Unmute</button>
   </div>
 
-
   <div id="messages" class="messages"></div>
   <div id="typing" class="typing"></div>
 
   <div class="composer">
+
+    <div id="emojiBtn" class="emoji-btn">😊</div>
+
+    <div id="emojiPopup" class="emoji-popup">
+      <span>😀</span><span>😁</span><span>😂</span><span>🤣</span>
+      <span>😍</span><span>😎</span><span>😭</span><span>👀</span>
+      <span>🤔</span><span>👍</span><span>👎</span><span>👋</span>
+    </div>
+
     <input id="input" placeholder="Type your message..." />
     <button id="send">Send</button>
   </div>
@@ -289,7 +295,7 @@ const socket = io("https://wdp-chat.onrender.com");
 let userId = localStorage.getItem("uid");
 if(!userId){
   userId = "User-" + Math.floor(10000 + Math.random()*90000);
-  localStorage.setItem("uid", userId);
+  localStorage.setItem("uid",userId);
 }
 document.getElementById("youAre").textContent = "You are: " + userId;
 
@@ -297,36 +303,42 @@ const messages = document.getElementById("messages");
 const typing = document.getElementById("typing");
 const popup = document.getElementById("popup");
 const popupList = document.getElementById("popupList");
-const onlineBox = document.getElementById("onlineBox");
-
 const notif = document.getElementById("notif");
-let soundReady = false;
-function prepareSound(){
-  if(soundReady) return;
-  notif.play().then(()=>{notif.pause();notif.currentTime=0;soundReady=true;});
-}
-window.addEventListener("click",prepareSound);
 
-const params = new URLSearchParams(location.search);
-const isAdmin = params.get("admin")==="supersecret123";
+const nameColors = {};
+const pastelColors = ["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
+
+function nameColor(uid){
+  if(nameColors[uid]) return nameColors[uid];
+  const c = pastelColors[Math.floor(Math.random()*pastelColors.length)];
+  nameColors[uid] = c;
+  return c;
+}
+
+let soundReady=false;
+function ready(){ if(soundReady) return; notif.play().then(()=>{notif.pause();notif.currentTime=0;soundReady=true;}); }
+window.addEventListener("click",ready);
+
+const params=new URLSearchParams(location.search);
+const isAdmin=params.get("admin")==="supersecret123";
 if(isAdmin) document.getElementById("adminPanel").style.display="flex";
 
-socket.emit("userConnected", userId);
+socket.emit("userConnected",userId);
 
-document.getElementById("send").onclick = ()=>{
-  const t = input.value.trim();
-  if(!t) return;
+send.onclick=()=>{
+  const t=input.value.trim();
+  if(!t)return;
   socket.emit("chatMessage",{userId,text:t});
   input.value="";
-  socket.emit("stopTyping", userId);
+  socket.emit("stopTyping",userId);
 };
 input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") send.click(); });
 
-let tmr;
+let timer;
 input.addEventListener("input",()=>{
   socket.emit("typing",userId);
-  clearTimeout(tmr);
-  tmr=setTimeout(()=>socket.emit("stopTyping",userId),500);
+  clearTimeout(timer);
+  timer=setTimeout(()=>socket.emit("stopTyping",userId),500);
 });
 
 function addMsg(m){
@@ -345,13 +357,15 @@ function addMsg(m){
   meta.className="meta";
 
   const n=document.createElement("div");
-  n.textContent = m.userId==="System"?"System":(m.userId===userId?"You":m.userId);
+  n.textContent=m.userId==="System"?"System":(m.userId===userId?"You":m.userId);
+  if(m.userId!=="System") n.style.color=nameColor(m.userId);
+  n.style.fontWeight="600";
 
-  const time=document.createElement("div");
-  time.textContent = m.timestamp||"";
+  const t=document.createElement("div");
+  t.textContent=m.timestamp||"";
 
   meta.appendChild(n);
-  meta.appendChild(time);
+  meta.appendChild(t);
 
   const body=document.createElement("div");
   body.textContent=m.text;
@@ -363,27 +377,27 @@ function addMsg(m){
   messages.scrollTop=messages.scrollHeight;
 
   if(m.userId!==userId && !m.isWelcome && soundReady){
-    notif.currentTime=0; notif.play();
+    notif.currentTime=0;
+    notif.play();
   }
 }
 
-socket.on("chatMessage",(m)=> addMsg(m));
+socket.on("chatMessage",(m)=>addMsg(m));
 
-socket.on("userTyping",(id)=>{
-  if(id!==userId) typing.textContent=id+" is typing...";
+socket.on("userTyping",(uid)=>{
+  if(uid!==userId) typing.textContent=uid+" is typing...";
 });
-socket.on("userStopTyping",()=> typing.textContent="");
+socket.on("userStopTyping",()=>typing.textContent="");
 
-socket.on("userJoinedEvent",(id)=>{
+socket.on("userJoinedEvent",(uid)=>{
   const e=document.createElement("div");
   e.className="event";
-  e.textContent="🟢 "+id+" joined";
+  e.textContent="🟢 "+uid+" joined";
   messages.appendChild(e);
 });
 
 socket.on("onlineList",(list)=>{
   onlineBox.textContent=list.length+" online";
-
   popupList.innerHTML="";
   list.forEach(u=>{
     const d=document.createElement("div");
@@ -392,17 +406,29 @@ socket.on("onlineList",(list)=>{
   });
 });
 
-onlineBox.onclick = ()=> popup.style.display="block";
-document.getElementById("closePopup").onclick = ()=> popup.style.display="none";
+const onlineBox=document.getElementById("onlineBox");
+onlineBox.onclick=()=>popup.style.display="block";
+document.getElementById("closePopup").onclick=()=>popup.style.display="none";
 
 clearChat.onclick=()=>socket.emit("adminClearChat");
 muteAll.onclick=()=>socket.emit("adminMuteAll");
 unmuteAll.onclick=()=>socket.emit("adminUnmuteAll");
 
-socket.on("clearChatNow",()=>{ messages.innerHTML=""; });
-socket.on("muteAllNow",()=>{ const e=document.createElement("div");e.className="event";e.textContent="Muted all users";messages.appendChild(e); });
-socket.on("unmuteAllNow",()=>{ const e=document.createElement("div");e.className="event";e.textContent="Unmuted all users";messages.appendChild(e); });
+socket.on("clearChatNow",()=>messages.innerHTML="");
+socket.on("muteAllNow",()=>{const e=document.createElement("div");e.className="event";e.textContent="Muted all users";messages.appendChild(e);});
+socket.on("unmuteAllNow",()=>{const e=document.createElement("div");e.className="event";e.textContent="Unmuted users";messages.appendChild(e);});
 
+emojiBtn.onclick=()=>{
+  emojiPopup.style.display = emojiPopup.style.display==="block" ? "none":"block";
+};
+
+emojiPopup.onclick=(e)=>{
+  if(e.target.tagName==="SPAN"){
+    input.value += e.target.textContent;
+    emojiPopup.style.display="none";
+    input.focus();
+  }
+};
 </script>
 
 </body>
