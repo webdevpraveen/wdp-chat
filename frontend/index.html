@@ -349,7 +349,10 @@ function addMsg(m){
   b.className="bubble";
 
   if(m.isWelcome) b.classList.add("welcome");
-  else if(m.isAdmin) b.classList.add("admin");
+  else if (isAdmin && m.userId === userId) {
+    b.classList.add("admin"); 
+    m.userId = "👑 Dev (" + userId + ")";
+}
   else if(m.userId===userId) b.classList.add("self");
   else b.classList.add("other");
 
