@@ -1,12 +1,12 @@
 # 🚀 WDP Live Chat  
-A fast, real-time chat application built using **Node.js**, **Express**, and **Socket.io**, paired with a clean and lightweight frontend.  
-This repository contains both the backend server and the frontend client, ready for deployment on modern hosting platforms like **Render** (backend) and **Vercel** (frontend).
+A fast, real-time chat application built using **HTML**, **Js**, and **Socket.io**, paired with a clean and lightweight frontend.  
+**Render** (backend) and **Vercel** (frontend).
 
 ---
 
-## 📸 Preview https://wdpchat.vercel.app
+## 📸 Preview
 > <img width="500" height="480" alt="image" src="https://github.com/user-attachments/assets/a9bf0fcc-32e7-49c2-b0f6-703723ed13db" />
-
+https://wdpchat.vercel.app
 
 ---
 
@@ -15,8 +15,7 @@ This repository contains both the backend server and the frontend client, ready 
 - 👥 **Online users counter** with live updates  
 - 🔔 **Notification sound** for incoming messages  
 - 🧼 **Clean and responsive UI**  
-- 🔗 Fully connected **Frontend ↔ Backend**  
-- ☁️ Deployment-ready structure  
+- 🔗 Fully connected **Frontend ↔ Backend**    
 - 🧱 Simple file architecture — beginner friendly  
 
 ---
@@ -97,9 +96,10 @@ Create an issue or submit a pull request to improve the project.
 ---
 
 ## 📄 License
-This project is open-source and available under the **MIT License**.
+This project is licensed under **CC BY-NC-ND 4.0**.  
+Copying or modifying this code outside GitHub is not permitted.
 
 ---
 
 ## ⭐ Support
-If you find this helpful, consider giving the repo a ⭐ on GitHub!
+If you find this helpful, consider giving the repo a ⭐.
