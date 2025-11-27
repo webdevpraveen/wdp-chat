@@ -4,412 +4,405 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>SRMU Web Chat</title>
+
 <style>
 :root{
-  --bg:#f1f4f8; --panel:#ffffff; --self:#d8f8d2; --other:#e6f0ff;
-  --admin:#ffe6e6; --welcome:#fff7cc; --accent:#2b7cff; --muted:#6b7280;
+  --bg:#f1f4f8; --panel:#ffffff;
+  --self:#d8f8d2; --other:#e6f0ff;
+  --admin:#ffe6e6; --welcome:#fff7cc;
+  --accent:#2b7cff; --muted:#6b7280;
   --text:#111827; --radius:12px;
 }
-*{box-sizing:border-box}
+*{ box-sizing:border-box; }
 body{
   margin:0; background:var(--bg);
-  font-family:Inter,Arial,Helvetica,sans-serif;
-  display:flex; align-items:center; justify-content:center;
+  font-family:Inter,Arial;
+  display:flex; justify-content:center; align-items:center;
   height:100vh; color:var(--text);
 }
-.chat-box{
+.chat{
   width:100%; max-width:980px; height:92vh;
   background:var(--panel);
-  border-radius:12px; box-shadow:0 10px 30px rgba(10,20,30,0.06);
-  display:grid; grid-template-columns: 1fr 320px;
-  gap:20px; padding:18px;
-}
-.left{
+  border-radius:12px;
+  box-shadow:0 12px 30px rgba(25,35,45,0.08);
   display:flex; flex-direction:column;
-  border-radius:12px; overflow:hidden;
+  overflow:hidden;
 }
+
 .header{
-  padding:12px 16px; display:flex;
-  align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  border-bottom:1px solid #e5eaf0;
 }
-.header-left{ display:flex; flex-direction:column; gap:2px; }
-.app-title{ font-weight:700; font-size:18px; }
-.you-id{ font-size:13px; color:var(--muted); }
-.header-center{ text-align:center; flex:1; }
-.header-right{ display:flex; gap:12px; align-items:center; }
-.github-link{
-  display:flex; align-items:center; justify-content:center;
-  width:34px; height:34px; border-radius:50%;
-  background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.04);
+
+.title-row{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:12px;
 }
-.online-count{
-  font-weight:600; cursor:pointer;
-  padding:6px 8px; border-radius:8px;
-  background:#fff; border:1px solid #eef2f7;
+
+.app-title{
+  font-size:20px;
+  font-weight:700;
+  text-align:center;
 }
-.online-popup{
-  position:absolute; right:22px; top:72px;
-  width:220px; background:#fff;
-  border-radius:10px; box-shadow:0 12px 40px rgba(10,20,30,0.12);
-  display:none; z-index:60;
+
+.github-icon{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.online-popup div{
-  padding:8px 10px; border-bottom:1px solid #f1f5f9;
+
+.you-are{
+  font-size:14px;
+  color:var(--muted);
+  width:100%;
+  text-align:left;
 }
-#pinnedBar{
-  display:none; background:#fafbfd;
-  border-radius:8px; padding:10px 14px;
-  margin:0 16px 8px 16px; font-weight:600;
+
+.status-row{
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+  margin-top:-4px;
 }
+
+.online-box{
+  padding:6px 12px;
+  border:1px solid #e5eaf0;
+  border-radius:10px;
+  background:#fff;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.popup{
+  position:absolute;
+  right:16px;
+  top:100px;
+  width:240px;
+  background:#fff;
+  border-radius:10px;
+  box-shadow:0 14px 40px rgba(0,0,0,0.15);
+  display:none;
+  z-index:50;
+}
+
+.popup-header{
+  padding:10px 12px;
+  font-weight:600;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.close-btn{
+  cursor:pointer;
+  font-size:18px;
+  line-height:18px;
+}
+
+.popup-list div{
+  padding:8px 12px;
+  border-bottom:1px solid #f5f5f5;
+}
+
 .messages{
-  flex:1; overflow:auto; padding:18px;
-  display:flex; flex-direction:column; gap:12px;
+  flex:1;
+  overflow:auto;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
 }
+
 .event{
-  text-align:center; color:var(--muted); font-size:13px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
 }
-.row{ display:flex; }
-.left-row{ justify-content:flex-start; }
-.right-row{ justify-content:flex-end; }
+
+.msg-row{
+  display:flex;
+}
+
+.left{ justify-content:flex-start; }
+.right{ justify-content:flex-end; }
+
 .bubble{
-  max-width:75%; padding:10px 14px;
-  border-radius:12px; font-size:14px;
-  box-shadow:0 4px 18px rgba(10,20,30,0.04);
+  max-width:75%;
+  padding:10px 14px;
+  border-radius:var(--radius);
+  font-size:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.06);
 }
-.self{ background:var(--self); border-bottom-right:6px solid rgba(0,0,0,0.03); }
+
+.self{ background:var(--self); }
 .other{ background:var(--other); }
 .admin{ background:var(--admin); border-left:4px solid #ff6b6b; }
 .welcome{ background:var(--welcome); }
+
 .meta{
-  display:flex; justify-content:space-between;
-  gap:12px; margin-bottom:8px;
-  color:var(--muted); font-size:12px;
-}
-.meta .name{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70%; }
-.meta .time{ font-size:11px; }
-.composer{
-  padding:12px 16px; border-top:1px solid #eef2f7;
-  display:flex; gap:10px;
-}
-.composer input{
-  flex:1; padding:12px 14px;
-  border-radius:999px; border:1px solid #e6eef6;
-  outline:none; font-size:14px;
-}
-.composer button{
-  padding:10px 14px; border-radius:999px;
-  background:var(--accent); border:none;
-  color:#fff; cursor:pointer; font-weight:600;
-}
-.right{
-  padding:12px; border-radius:12px;
-  background:var(--panel);
-  box-shadow:0 10px 30px rgba(10,20,30,0.04);
-  display:flex; flex-direction:column; gap:12px;
-}
-.right h4{ margin:0; font-size:14px; }
-.online-list{
-  display:flex; flex-direction:column;
-  gap:8px; overflow:auto;
-  max-height:60vh; padding-top:6px;
-}
-.user-item{
-  display:flex; align-items:center;
+  display:flex;
   justify-content:space-between;
-  gap:10px; padding:8px;
-  border-radius:8px; background:#fbfdff;
-  border:1px solid #f1f6fb;
+  margin-bottom:6px;
+  font-size:12px;
+  color:var(--muted);
 }
-.user-left{ display:flex; gap:10px; align-items:center; }
-.avatar{
-  width:36px; height:36px; border-radius:50%;
-  display:grid; place-items:center;
-  background:#eef6ff; color:#1f3b82; font-weight:700;
+
+.typing{
+  height:18px;
+  padding-left:18px;
+  color:var(--muted);
 }
-.user-actions button{
-  padding:6px 8px; border-radius:8px;
-  border:1px solid #eef2f7;
-  background:#fff; cursor:pointer; font-size:13px;
+
+.composer{
+  padding:12px;
+  border-top:1px solid #e5eaf0;
+  display:flex;
+  gap:10px;
 }
-.small-muted{ color:var(--muted); font-size:13px; }
-@media(max-width:900px){
-  .chat-box{ grid-template-columns:1fr; padding:12px; gap:12px; }
-  .right{ order:2; height:auto; }
-  .left{ order:1; }
-  .online-popup{ right:10px; top:86px; }
-  .app-title{ font-size:16px; }
-  .messages{ padding:12px; }
+
+.composer input{
+  flex:1;
+  padding:12px 16px;
+  border-radius:999px;
+  border:1px solid #cfd6df;
+  outline:none;
+  font-size:15px;
+}
+
+.composer button{
+  background:var(--accent);
+  padding:10px 18px;
+  border-radius:999px;
+  border:none;
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.admin-panel{
+  padding:10px;
+  display:flex;
+  gap:8px;
+  border-bottom:1px solid #e5eaf0;
+  display:none;
+}
+
+.admin-panel button{
+  padding:6px 12px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  background:white;
+  cursor:pointer;
+}
+
+@media(max-width:600px){
+  .app-title{ font-size:18px; }
+  .github-icon{ width:30px;height:30px; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="chat-box">
+<div class="chat">
 
-  <div class="left">
+  <div class="header">
 
-    <div class="header">
-      <div class="header-left">
-        <div id="youId" class="you-id"></div>
-      </div>
+    <div class="title-row">
+      <div class="app-title">SRMU Web Chat</div>
 
-      <div class="header-center">
-        <div class="app-title">SRMU Web Chat</div>
-      </div>
-
-      <div class="header-right">
-        <a class="github-link" href="https://github.com/webdevpraveen" target="_blank">
-          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8a8 
-            8 0 005.47 7.59c.4.07.55-.17.55-.38 
-            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
-            -.01-.53.63-.01 1.08.58 1.23.82.72 
-            1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 
-            0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 
-            0 0 .67-.21 2.2.82a7.65 7.65 0 
-            012 0c1.53-1.04 2.2-.82 2.2-.82.44 
-            1.1.16 1.92.08 2.12.51.56.82 1.27.82 
-            2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 
-            1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 
-            8 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-        </a>
-
-        <div id="onlineCount" class="online-count">0 online</div>
-      </div>
+      <a href="https://github.com/webdevpraveen" target="_blank" class="github-icon">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 0C3.58 0 0 3.58 0 8a8 
+          8 0 005.47 7.59c.4.07.55-.17.55-.38 
+          0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
+          -.01-.53.63-.01 1.08.58 1.23.82.72 
+          1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 
+          0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 
+          0 0 .67-.21 2.2.82a7.65 7.65 0 
+          012 0c1.53-1.04 2.2-.82 2.2-.82.44 
+          1.1.16 1.92.08 2.12.51.56.82 1.27.82 
+          2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 
+          1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 
+          8 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+      </a>
     </div>
 
-    <div id="onlinePopup" class="online-popup"></div>
+    <div id="youAre" class="you-are"></div>
 
-    <div id="pinnedBar">📌 <span id="pinnedText"></span></div>
-
-    <div id="messages" class="messages"></div>
-    <div id="typingStatus" style="padding:10px 18px; color:var(--muted); min-height:18px"></div>
-
-    <div class="composer">
-      <input id="input" placeholder="Type your message..." />
-      <button id="send">Send</button>
+    <div class="status-row">
+      <div id="onlineBox" class="online-box">0 online</div>
     </div>
 
   </div>
 
-  <div class="right">
-    <h4>Online</h4>
-    <div id="onlineList" class="online-list"></div>
 
-    <div style="height:1px;background:#eef2f7;margin:6px 0"></div>
-
-    <div style="display:flex;gap:8px;">
-      <button id="clearChat" style="display:none">Clear</button>
-      <button id="muteAll" style="display:none">Mute</button>
-      <button id="unmuteAll" style="display:none">Unmute</button>
+  <div id="popup" class="popup">
+    <div class="popup-header">
+      Online Users
+      <div id="closePopup" class="close-btn">×</div>
     </div>
+    <div id="popupList" class="popup-list"></div>
+  </div>
 
-    <div style="margin-top:auto" class="small-muted">SRMU Web Chat • v3.0</div>
+
+  <div class="admin-panel" id="adminPanel">
+    <button id="clearChat">Clear</button>
+    <button id="muteAll">Mute</button>
+    <button id="unmuteAll">Unmute</button>
+  </div>
+
+
+  <div id="messages" class="messages"></div>
+  <div id="typing" class="typing"></div>
+
+  <div class="composer">
+    <input id="input" placeholder="Type your message..." />
+    <button id="send">Send</button>
   </div>
 
 </div>
 
-<audio id="notifSound" src="notification.mp3" preload="auto"></audio>
+
+<audio id="notif" src="notification.mp3" preload="auto"></audio>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
 <script>
 const socket = io("https://wdp-chat.onrender.com");
-let userId = localStorage.getItem("userId");
-if(!userId){ userId = "User-" + Math.floor(10000 + Math.random()*90000); localStorage.setItem("userId", userId); }
-document.getElementById("youId").textContent = "You are: " + userId;
 
-const messagesEl = document.getElementById("messages");
-const typingStatus = document.getElementById("typingStatus");
-const input = document.getElementById("input");
-const notif = document.getElementById("notifSound");
-const onlineCount = document.getElementById("onlineCount");
-const onlinePopup = document.getElementById("onlinePopup");
-const onlineListEl = document.getElementById("onlineList");
-const pinnedBar = document.getElementById("pinnedBar");
-const pinnedText = document.getElementById("pinnedText");
-const clearBtn = document.getElementById("clearChat");
-const muteBtn = document.getElementById("muteAll");
-const unmuteBtn = document.getElementById("unmuteAll");
-
-const isAdmin = new URLSearchParams(window.location.search).get("admin")==="supersecret123";
-if(isAdmin){
-  clearBtn.style.display="inline-block";
-  muteBtn.style.display="inline-block";
-  unmuteBtn.style.display="inline-block";
+let userId = localStorage.getItem("uid");
+if(!userId){
+  userId = "User-" + Math.floor(10000 + Math.random()*90000);
+  localStorage.setItem("uid", userId);
 }
+document.getElementById("youAre").textContent = "You are: " + userId;
 
-let soundEnabled = localStorage.getItem("soundEnabled")==="1";
-function enableSound(){
-  if(soundEnabled) return;
-  try{
-    notif.volume=1;
-    notif.play().then(()=>{ notif.pause(); notif.currentTime=0; soundEnabled=true; localStorage.setItem("soundEnabled","1"); });
-  }catch(e){}
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
+const popup = document.getElementById("popup");
+const popupList = document.getElementById("popupList");
+const onlineBox = document.getElementById("onlineBox");
+
+const notif = document.getElementById("notif");
+let soundReady = false;
+function prepareSound(){
+  if(soundReady) return;
+  notif.play().then(()=>{notif.pause();notif.currentTime=0;soundReady=true;});
 }
-const gesture=()=>{ enableSound(); window.removeEventListener("click",gesture); window.removeEventListener("keydown",gesture); };
-window.addEventListener("click",gesture);
-window.addEventListener("keydown",gesture);
+window.addEventListener("click",prepareSound);
 
-socket.on("connect", ()=> socket.emit("userConnected", userId));
+const params = new URLSearchParams(location.search);
+const isAdmin = params.get("admin")==="supersecret123";
+if(isAdmin) document.getElementById("adminPanel").style.display="flex";
+
+socket.emit("userConnected", userId);
 
 document.getElementById("send").onclick = ()=>{
-  const txt = input.value.trim();
-  if(!txt) return;
-  socket.emit("chatMessage",{ userId,text:txt });
+  const t = input.value.trim();
+  if(!t) return;
+  socket.emit("chatMessage",{userId,text:t});
   input.value="";
   socket.emit("stopTyping", userId);
 };
+input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") send.click(); });
 
-input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") document.getElementById("send").click(); });
-
-let typingTimer;
+let tmr;
 input.addEventListener("input",()=>{
-  socket.emit("typing", userId);
-  clearTimeout(typingTimer);
-  typingTimer=setTimeout(()=>socket.emit("stopTyping",userId),600);
+  socket.emit("typing",userId);
+  clearTimeout(tmr);
+  tmr=setTimeout(()=>socket.emit("stopTyping",userId),500);
 });
 
-onlineCount.onclick = ()=> onlinePopup.style.display = onlinePopup.style.display==="block"?"none":"block";
-
-function addMessage(msg){
+function addMsg(m){
   const row=document.createElement("div");
-  row.className="row "+(msg.userId===userId?"right-row":"left-row");
+  row.className="msg-row "+(m.userId===userId?"right":"left");
 
   const b=document.createElement("div");
   b.className="bubble";
 
-  if(msg.isWelcome) b.classList.add("welcome");
-  else if(msg.userId==="System") b.classList.add("welcome");
-  else if(msg.userId===userId) b.classList.add("self");
-  else if(msg.isAdmin) b.classList.add("admin");
+  if(m.isWelcome) b.classList.add("welcome");
+  else if(m.isAdmin) b.classList.add("admin");
+  else if(m.userId===userId) b.classList.add("self");
   else b.classList.add("other");
 
   const meta=document.createElement("div");
   meta.className="meta";
 
-  const name=document.createElement("div");
-  name.className="name";
-  name.textContent = msg.userId==="System"?"System":(msg.userId===userId?"You":msg.userId);
+  const n=document.createElement("div");
+  n.textContent = m.userId==="System"?"System":(m.userId===userId?"You":m.userId);
 
   const time=document.createElement("div");
-  time.className="time";
-  time.textContent = msg.timestamp||"";
+  time.textContent = m.timestamp||"";
 
-  meta.appendChild(name);
+  meta.appendChild(n);
   meta.appendChild(time);
 
   const body=document.createElement("div");
-  body.textContent=msg.text;
+  body.textContent=m.text;
 
   b.appendChild(meta);
   b.appendChild(body);
-
   row.appendChild(b);
-  messagesEl.appendChild(row);
-  messagesEl.scrollTop=messagesEl.scrollHeight;
+  messages.appendChild(row);
+  messages.scrollTop=messages.scrollHeight;
 
-  if(msg.userId!==userId && !msg.isWelcome && localStorage.getItem("soundEnabled")==="1"){
-    try{ notif.currentTime=0; notif.play(); }catch(e){}
+  if(m.userId!==userId && !m.isWelcome && soundReady){
+    notif.currentTime=0; notif.play();
   }
 }
 
-socket.on("chatMessage",(msg)=> addMessage(msg));
+socket.on("chatMessage",(m)=> addMsg(m));
 
-socket.on("userTyping",(uid)=>{
-  if(uid===userId) return;
-  typingStatus.textContent = uid + " is typing...";
+socket.on("userTyping",(id)=>{
+  if(id!==userId) typing.textContent=id+" is typing...";
 });
-socket.on("userStopTyping",()=> typingStatus.textContent="");
+socket.on("userStopTyping",()=> typing.textContent="");
+
+socket.on("userJoinedEvent",(id)=>{
+  const e=document.createElement("div");
+  e.className="event";
+  e.textContent="🟢 "+id+" joined";
+  messages.appendChild(e);
+});
 
 socket.on("onlineList",(list)=>{
-  onlineListEl.innerHTML="";
+  onlineBox.textContent=list.length+" online";
+
+  popupList.innerHTML="";
   list.forEach(u=>{
-    const item=document.createElement("div");
-    item.className="user-item";
-
-    const left=document.createElement("div");
-    left.className="user-left";
-
-    const av=document.createElement("div");
-    av.className="avatar";
-    av.textContent=u.replace(/[^A-Za-z0-9]/g,'').slice(0,2);
-
-    const name=document.createElement("div");
-    name.textContent=u;
-
-    left.appendChild(av);
-    left.appendChild(name);
-
-    const actions=document.createElement("div");
-    actions.className="user-actions";
-
-    const c=document.createElement("button");
-    c.textContent="Copy";
-    c.onclick=()=>navigator.clipboard.writeText(u).then(()=>alert("Copied "+u));
-    actions.appendChild(c);
-
-    if(isAdmin){
-      const k=document.createElement("button");
-      k.textContent="Kick";
-      k.onclick=()=>alert("Kick placeholder");
-      actions.appendChild(k);
-    }
-
-    item.appendChild(left);
-    item.appendChild(actions);
-    onlineListEl.appendChild(item);
-  });
-
-  onlineCount.textContent=list.length+" online";
-
-  onlinePopup.innerHTML="";
-  list.forEach(u=>{
-    const r=document.createElement("div");
-    r.textContent=u;
-    onlinePopup.appendChild(r);
+    const d=document.createElement("div");
+    d.textContent=u;
+    popupList.appendChild(d);
   });
 });
 
-socket.on("userJoinedEvent",(uid)=>{
-  const e=document.createElement("div");
-  e.className="event";
-  e.textContent="🟢 "+uid+" joined";
-  messagesEl.appendChild(e);
-  messagesEl.scrollTop=messagesEl.scrollHeight;
-});
+onlineBox.onclick = ()=> popup.style.display="block";
+document.getElementById("closePopup").onclick = ()=> popup.style.display="none";
 
-socket.on("userLeftEvent",(uid)=>{
-  const e=document.createElement("div");
-  e.className="event";
-  e.textContent="🔴 "+uid+" left";
-  messagesEl.appendChild(e);
-  messagesEl.scrollTop=messagesEl.scrollHeight;
-});
+clearChat.onclick=()=>socket.emit("adminClearChat");
+muteAll.onclick=()=>socket.emit("adminMuteAll");
+unmuteAll.onclick=()=>socket.emit("adminUnmuteAll");
 
-socket.on("pinnedNow",(text)=>{
-  if(text){
-    pinnedText.textContent=text;
-    pinnedBar.style.display="block";
-  }else{
-    pinnedBar.style.display="none";
-    pinnedText.textContent="";
-  }
-});
+socket.on("clearChatNow",()=>{ messages.innerHTML=""; });
+socket.on("muteAllNow",()=>{ const e=document.createElement("div");e.className="event";e.textContent="Muted all users";messages.appendChild(e); });
+socket.on("unmuteAllNow",()=>{ const e=document.createElement("div");e.className="event";e.textContent="Unmuted all users";messages.appendChild(e); });
 
-socket.on("clearChatNow",()=>{ messagesEl.innerHTML=""; });
-socket.on("muteAllNow",()=>{ const e=document.createElement("div");e.className="event";e.textContent="🔇 Admin muted all users";messagesEl.appendChild(e); });
-socket.on("unmuteAllNow",()=>{ const e=document.createElement("div");e.className="event";e.textContent="🔊 Admin unmuted users";messagesEl.appendChild(e); });
-
-clearBtn.onclick=()=>socket.emit("adminClearChat");
-muteBtn.onclick=()=>socket.emit("adminMuteAll");
-unmuteBtn.onclick=()=>socket.emit("adminUnmuteAll");
-
-document.addEventListener("click",(ev)=>{
-  if(!onlinePopup.contains(ev.target) && ev.target!==onlineCount)
-    onlinePopup.style.display="none";
-});
 </script>
 
 </body>
