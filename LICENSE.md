@@ -5,7 +5,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International License.
 
 ## You are free to:
 - View the code
-- Fork this repository directly on GitHub (with automatic attribution)
+- Fork this repository directly on GitHub
 
 ## You may NOT:
 - Copy the code outside GitHub without permission
@@ -15,6 +15,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International License.
 
 ## Attribution:
 When using or forking this repository, you must give appropriate credit:
+
 **© 2025 webdevpraveen**
 
-For permissions beyond this license, contact the author.
+
