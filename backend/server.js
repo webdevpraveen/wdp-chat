@@ -3,13 +3,20 @@ const app = express();
 const http = require("http").createServer(app);
 const cors = require("cors");
 app.use(cors());
-
-const io = require("socket.io")(http, {
-  cors: { origin: "*" }
-});
+const io = require("socket.io")(http, { cors: { origin: "*" } });
 
 let mutedUsers = new Set();
 let onlineUsers = 0;
+
+function formatTime(d){
+  let hr = d.getHours();
+  let min = d.getMinutes();
+  let ampm = hr >= 12 ? "PM" : "AM";
+  hr = hr % 12;
+  hr = hr ? hr : 12;
+  min = min < 10 ? "0"+min : min;
+  return hr + ":" + min + " " + ampm;
+}
 
 io.on("connection", (socket) => {
   onlineUsers++;
@@ -30,6 +37,7 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (msg) => {
     if (mutedUsers.has("all") || mutedUsers.has(msg.userId)) return;
+    msg.timestamp = formatTime(new Date());
     io.emit("chatMessage", msg);
   });
 
