@@ -3,21 +3,32 @@ const app = express();
 const http = require("http").createServer(app);
 const cors = require("cors");
 app.use(cors());
-const io = require("socket.io")(http, { cors: { origin: "*" } });
+
+const io = require("socket.io")(http, {
+  cors: { origin: "*" }
+});
 
 let mutedUsers = new Set();
-let onlineUsers = 0;
+let onlineUsers = {};
 let pinnedMessage = "";
 
 io.on("connection", (socket) => {
-  onlineUsers++;
-  io.emit("onlineCount", onlineUsers);
-  socket.emit("pinnedNow", pinnedMessage);
 
   socket.on("userConnected", (userId) => {
     socket.data.userId = userId;
-    io.emit("userJoined", userId);
+    onlineUsers[userId] = true;
+
+    io.emit("onlineList", Object.keys(onlineUsers));
+
+    io.emit("chatMessage", {
+      text: `👋 Welcome ${userId} to SRMU Web Chat!`,
+      userId: "System",
+      isWelcome: true
+    });
+
+    io.emit("userJoinedEvent", userId);
   });
+
 
   socket.on("typing", (userId) => {
     socket.broadcast.emit("userTyping", userId);
@@ -27,31 +38,35 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("userStopTyping", userId);
   });
 
+
   socket.on("chatMessage", (msg) => {
     if (mutedUsers.has("all") || mutedUsers.has(msg.userId)) return;
 
     const d = new Date();
     let hr = d.getUTCHours() + 5;
     let min = d.getUTCMinutes() + 30;
-    if (min >= 60) { hr += 1; min -= 60; }
+    if (min >= 60) { hr++; min -= 60; }
     hr = (hr + 24) % 24;
     let ampm = hr >= 12 ? "PM" : "AM";
     hr = hr % 12 || 12;
     min = min.toString().padStart(2, "0");
+
     msg.timestamp = `${hr}:${min} ${ampm}`;
 
     io.emit("chatMessage", msg);
   });
 
+
   socket.on("pinMessage", (text) => {
-    pinnedMessage = text || "";
+    pinnedMessage = text;
     io.emit("pinnedNow", pinnedMessage);
   });
 
   socket.on("unpinMessage", () => {
     pinnedMessage = "";
-    io.emit("pinnedNow", pinnedMessage);
+    io.emit("pinnedNow", "");
   });
+
 
   socket.on("adminClearChat", () => {
     io.emit("clearChatNow");
@@ -67,14 +82,15 @@ io.on("connection", (socket) => {
     io.emit("unmuteAllNow");
   });
 
+
   socket.on("disconnect", () => {
     const uid = socket.data.userId;
-    if (uid) io.emit("userLeft", uid);
-    onlineUsers--;
-    io.emit("onlineCount", onlineUsers);
+    if (uid) {
+      delete onlineUsers[uid];
+      io.emit("onlineList", Object.keys(onlineUsers));
+      io.emit("userLeftEvent", uid);
+    }
   });
 });
 
-http.listen(3000, () => {
-  console.log("Server started on port 3000");
-});
+http.listen(3000, () => console.log("Server running on 3000"));
