@@ -95,8 +95,8 @@ Create an issue or submit a pull request to improve the project.
 
 ---
 
-## 📄 License
-This project is licensed under **CC BY-NC-ND 4.0**.  
+ 📄 License
+  This project is licensed under **CC BY-NC-ND 4.0**.  
 Copying or modifying this code outside GitHub is not permitted.
 
 ---
