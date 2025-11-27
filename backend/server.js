@@ -29,14 +29,25 @@ io.on("connection", (socket) => {
     if (mutedUsers.has("all") || mutedUsers.has(msg.userId)) return;
 
     const d = new Date();
-    let hr = d.getHours();
-    let min = d.getMinutes().toString().padStart(2, "0");
+    let hr = d.getHours() + 5; 
+    let min = d.getMinutes() + 30;
+
+    if (min >= 60) {
+        hr += 1;
+        min -= 60;
+    }
+
+    hr = hr % 24;
+
     let ampm = hr >= 12 ? "PM" : "AM";
     hr = hr % 12 || 12;
+    min = min.toString().padStart(2, "0");
+
     msg.timestamp = `${hr}:${min} ${ampm}`;
 
     io.emit("chatMessage", msg);
-  });
+});
+
 
   socket.on("adminClearChat", () => {
     io.emit("clearChatNow");
