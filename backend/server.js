@@ -7,10 +7,12 @@ const io = require("socket.io")(http, { cors: { origin: "*" } });
 
 let mutedUsers = new Set();
 let onlineUsers = 0;
+let pinnedMessage = "";
 
 io.on("connection", (socket) => {
   onlineUsers++;
   io.emit("onlineCount", onlineUsers);
+  socket.emit("pinnedNow", pinnedMessage);
 
   socket.on("userConnected", (userId) => {
     socket.data.userId = userId;
@@ -29,25 +31,27 @@ io.on("connection", (socket) => {
     if (mutedUsers.has("all") || mutedUsers.has(msg.userId)) return;
 
     const d = new Date();
-    let hr = d.getHours() + 5; 
-    let min = d.getMinutes() + 30;
-
-    if (min >= 60) {
-        hr += 1;
-        min -= 60;
-    }
-
-    hr = hr % 24;
-
+    let hr = d.getUTCHours() + 5;
+    let min = d.getUTCMinutes() + 30;
+    if (min >= 60) { hr += 1; min -= 60; }
+    hr = (hr + 24) % 24;
     let ampm = hr >= 12 ? "PM" : "AM";
     hr = hr % 12 || 12;
     min = min.toString().padStart(2, "0");
-
     msg.timestamp = `${hr}:${min} ${ampm}`;
 
     io.emit("chatMessage", msg);
-});
+  });
 
+  socket.on("pinMessage", (text) => {
+    pinnedMessage = text || "";
+    io.emit("pinnedNow", pinnedMessage);
+  });
+
+  socket.on("unpinMessage", () => {
+    pinnedMessage = "";
+    io.emit("pinnedNow", pinnedMessage);
+  });
 
   socket.on("adminClearChat", () => {
     io.emit("clearChatNow");
