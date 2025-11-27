@@ -4,6 +4,7 @@
     <title>WDP Live Chat</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <style>
         :root{
             --bg:#f7f9fc;
@@ -44,37 +45,61 @@
         .row{ display:flex; }
         .left{ justify-content:flex-start; }
         .right{ justify-content:flex-end; }
+
         .bubble{
             max-width:70%; padding:10px 14px; border-radius:var(--radius);
             font-size:14px; box-shadow:0 2px 6px rgba(0,0,0,0.05);
         }
+
         .self{ background:var(--self); }
         .other{ background:var(--other); }
+
         .admin{
-            background:var(--admin); border-left:4px solid #ff6b6b;
+            background:var(--admin);
+            border-left:4px solid #ff6b6b;
             font-weight:600;
         }
-        .meta{ font-size:12px; color:var(--muted); margin-bottom:4px; display:flex; justify-content:space-between; gap:8px; align-items:center; }
-        .composer{
-            padding:12px; display:flex; gap:10px; border-top:1px solid #eee;
+
+        .meta{
+            font-size:12px; color:var(--muted);
+            margin-bottom:6px; display:flex;
+            justify-content:space-between; gap:8px;
+            align-items:center;
         }
+
+        .composer{
+            padding:12px; display:flex; gap:10px;
+            border-top:1px solid #eee;
+        }
+
         .composer input{
             flex:1; padding:10px 12px; border-radius:10px;
             border:1px solid #ddd;
         }
+
         .composer button{
             padding:10px 16px; border:none;
             background:var(--accent); color:#fff;
             border-radius:10px; cursor:pointer;
         }
-        #typingStatus{ padding:0 16px; color:var(--muted); height:18px; }
-        #adminPanel button{
-            margin-left:6px; padding:6px 10px; border-radius:6px;
-            border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px;
+
+        #typingStatus{
+            padding:0 16px; color:var(--muted); height:18px;
         }
-        .time{ font-size:11px; color:var(--muted); margin-left:8px; }
+
+        #adminPanel button{
+            margin-left:6px; padding:6px 10px;
+            border-radius:6px; border:1px solid #ddd;
+            background:#fff; cursor:pointer; font-size:13px;
+        }
+
+        .time{
+            font-size:11px; color:var(--muted);
+            margin-left:8px;
+        }
     </style>
 </head>
+
 <body>
 
 <div class="chat">
@@ -85,22 +110,10 @@
         <div style="display:flex; gap:16px; align-items:center;">
             <a href="https://github.com/webdevpraveen" target="_blank"
                style="display:flex; align-items:center; color:#000;">
-                <svg height="26" width="26" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8a8 
-                    8 0 005.47 7.59c.4.07.55-.17.55-.38 
-                    0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
-                    -.01-.53.63-.01 1.08.58 1.23.82.72 
-                    1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 
-                    0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 
-                    0 0 .67-.21 2.2.82a7.65 7.65 0 
-                    012 0c1.53-1.04 2.2-.82 2.2-.82.44 
-                    1.1.16 1.92.08 2.12.51.56.82 1.27.82 
-                    2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 
-                    1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 
-                    8 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                <svg height="24" width="24" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 0C3.58..."></path>
                 </svg>
             </a>
-
             <div id="adminPanel"></div>
         </div>
     </div>
@@ -119,6 +132,7 @@
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
+
 const query = new URLSearchParams(window.location.search);
 const isAdmin = query.get("admin") === "supersecret123";
 
@@ -167,16 +181,24 @@ function bubble(msg){
 
     const meta = document.createElement("div");
     meta.className = "meta";
-    meta.innerHTML =
-        (msg.isAdmin ? "👑 Admin ("+msg.userId+")" :
-        msg.userId === userId ? "You" : msg.userId)
-        + '<span class="time">'+(msg.timestamp || '')+'</span>';
 
-    const body = document.createElement('div');
-    body.textContent = msg.text;
+    const name = document.createElement("div");
+    name.textContent =
+        msg.isAdmin ? "👑 Admin ("+msg.userId+")" :
+        msg.userId === userId ? "You" : msg.userId;
 
+    const time = document.createElement("div");
+    time.className = "time";
+    time.textContent = msg.timestamp;
+
+    meta.appendChild(name);
+    meta.appendChild(time);
     b.appendChild(meta);
+
+    const body = document.createElement("div");
+    body.textContent = msg.text;
     b.appendChild(body);
+
     row.appendChild(b);
     messages.appendChild(row);
     scrollBottom();
@@ -185,17 +207,19 @@ function bubble(msg){
 send.onclick = () => {
     const val = input.value.trim();
     if (!val) return;
+
     socket.emit("chatMessage", {
         userId,
         text: val,
         isAdmin
     });
+
     input.value = "";
     socket.emit("stopTyping", userId);
 };
 
 input.addEventListener("keydown", (e)=> {
-    if (e.key === "Enter") send.onclick();
+    if (e.key === "Enter") send.click();
 });
 
 socket.on("chatMessage", (msg) => {
@@ -215,6 +239,7 @@ input.addEventListener("input", () => {
 socket.on("userTyping", (uid) => {
     if (uid !== userId) typingStatus.textContent = uid + " is typing...";
 });
+
 socket.on("userStopTyping", () => typingStatus.textContent = "");
 
 socket.on("userJoined", (uid)=> eventMsg("🟢 "+uid+" joined"));
@@ -235,6 +260,7 @@ eventMsg("You are: "+userId + (isAdmin ? " (admin)" : ""));
 socket.on("onlineCount", (count) => {
     document.getElementById("onlineCount").textContent = count + " online";
 });
+
 </script>
 
 </body>

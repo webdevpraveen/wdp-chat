@@ -8,16 +8,6 @@ const io = require("socket.io")(http, { cors: { origin: "*" } });
 let mutedUsers = new Set();
 let onlineUsers = 0;
 
-function formatTime(d){
-  let hr = d.getHours();
-  let min = d.getMinutes();
-  let ampm = hr >= 12 ? "PM" : "AM";
-  hr = hr % 12;
-  hr = hr ? hr : 12;
-  min = min < 10 ? "0"+min : min;
-  return hr + ":" + min + " " + ampm;
-}
-
 io.on("connection", (socket) => {
   onlineUsers++;
   io.emit("onlineCount", onlineUsers);
@@ -37,7 +27,14 @@ io.on("connection", (socket) => {
 
   socket.on("chatMessage", (msg) => {
     if (mutedUsers.has("all") || mutedUsers.has(msg.userId)) return;
-    msg.timestamp = formatTime(new Date());
+
+    const d = new Date();
+    let hr = d.getHours();
+    let min = d.getMinutes().toString().padStart(2, "0");
+    let ampm = hr >= 12 ? "PM" : "AM";
+    hr = hr % 12 || 12;
+    msg.timestamp = `${hr}:${min} ${ampm}`;
+
     io.emit("chatMessage", msg);
   });
 
