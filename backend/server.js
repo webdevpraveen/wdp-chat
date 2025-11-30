@@ -21,7 +21,7 @@ io.on("connection", (socket) => {
     io.emit("onlineList", Object.keys(onlineUsers));
 
     io.emit("chatMessage", {
-      text: `👋 Welcome ${userId} to SRMU Web Chat!`,
+      text: `Hi👋${userId},Welcome to Web Chat !`,
       userId: "System",
       isWelcome: true
     });
