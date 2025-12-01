@@ -30,7 +30,8 @@ wdp-chat/
 │ └── package.json
 │
 └── frontend/
-└── index.html
+  ├── index.html
+  └── about.html
 ```
 
 
