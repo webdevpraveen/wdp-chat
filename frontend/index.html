@@ -3,8 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Web Chat</title>
-
+<title>SRMU Web Chat</title>
 <style>
 :root{
   --bg:#f1f4f8; --panel:#ffffff;
@@ -16,204 +15,88 @@
 *{ box-sizing:border-box; }
 body{
   margin:0; background:var(--bg);
-  font-family:Inter,Arial;
-  display:flex; justify-content:center; align-items:center;
+  font-family:Inter,Arial; display:flex; justify-content:center; align-items:center;
   height:100vh; color:var(--text);
 }
-
 .chat{
   width:100%; max-width:980px; height:92vh;
   background:var(--panel); border-radius:12px;
   box-shadow:0 12px 30px rgba(25,35,45,0.08);
   display:flex; flex-direction:column; overflow:hidden;
 }
-
-.header{
-  padding:10px 16px;
-  border-bottom:1px solid #e5eaf0;
-  background:#fff;
-}
-.header-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  width:100%;
-}
-.online-box{
-  padding:6px 12px;
-  background:#fff;
-  border:1px solid #e5eaf0;
-  border-radius:10px;
-  font-weight:500;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.title-wrap{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-}
-.app-title{
-  font-size:20px;
-  font-weight:700;
-}
-.you-are{
-  font-size:13px;
-  color:#6b7280;
-  margin-top:2px;
-}
-.right-wrap{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-.about-btn{
-  padding:6px 12px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  background:#fff;
-  cursor:pointer;
-  font-size:13px;
-}
-.popup{
-  position:absolute;
-  right:16px; top:95px;
-  width:240px;
-  background:#fff;
-  border-radius:10px;
-  box-shadow:0 12px 40px rgba(0,0,0,0.15);
-  display:none;
-  z-index:50;
-}
-.popup-header{
-  padding:10px 12px;
-  border-bottom:1px solid #eee;
-  display:flex; justify-content:space-between; align-items:center;
-  font-weight:600;
-}
+.header{ padding:10px 16px; border-bottom:1px solid #e5eaf0; background:#fff; }
+.header-row{ display:flex; justify-content:space-between; align-items:center; width:100%; }
+.online-box{ padding:6px 12px; background:#fff; border:1px solid #e5eaf0; border-radius:10px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.title-wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+.app-title{ font-size:20px; font-weight:700; }
+.you-are{ font-size:13px; color:#6b7280; margin-top:2px; }
+.right-wrap{ display:flex; gap:12px; align-items:center; }
+.about-btn{ padding:6px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px; }
+.github-icon{ width:36px; height:36px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:flex; align-items:center; justify-content:center; }
+.popup{ position:absolute; right:16px; top:95px; width:260px; background:#fff; border-radius:10px; box-shadow:0 12px 40px rgba(0,0,0,0.15); display:none; z-index:50; }
+.popup-header{ padding:10px 12px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; font-weight:600; }
 .close-btn{ cursor:pointer; font-size:18px; }
-.popup-list div{
-  padding:8px 12px;
-  border-bottom:1px solid #f5f5f5;
-}
+.popup-list div{ padding:8px 12px; border-bottom:1px solid #f5f5f5; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.msg-button{ padding:6px 8px; border-radius:6px; border:1px solid #e6eef6; background:#fff; cursor:pointer; font-size:13px; }
 
-.admin-panel{
-  padding:10px; display:none;
-  gap:8px; border-bottom:1px solid #e5eaf0;
-}
-.admin-panel button{
-  padding:6px 12px;
-  border-radius:8px;
-  border:1px solid #ddd;
-  background:#fff; cursor:pointer; font-size:13px;
-}
+.admin-panel{ padding:10px; display:none; gap:8px; border-bottom:1px solid #e5eaf0; }
+.admin-panel button{ padding:6px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px; }
 
-.messages{
-  flex:1; padding:18px;
-  overflow:auto;
-  display:flex; flex-direction:column;
-  gap:12px;
-}
-.event{
-  text-align:center; font-size:13px; color:var(--muted);
-}
+.messages{ flex:1; padding:18px; overflow:auto; display:flex; flex-direction:column; gap:12px; }
+.event{ text-align:center; font-size:13px; color:var(--muted); }
 
 .msg-row{ display:flex; }
 .left{ justify-content:flex-start; }
 .right{ justify-content:flex-end; }
 
-.bubble{
-  max-width:75%;
-  padding:10px 14px;
-  border-radius:var(--radius);
-  font-size:14px;
-  box-shadow:0 4px 16px rgba(0,0,0,0.06);
-}
+.bubble{ max-width:75%; padding:10px 14px; border-radius:var(--radius); font-size:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
 .self{ background:var(--self); }
 .other{ background:var(--other); }
 .admin{ background:var(--admin); border-left:4px solid #ff6b6b; }
 .welcome{ background:var(--welcome); }
+.dm{ border:2px dashed rgba(120,80,200,0.12); }
 
-.meta{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:6px;
-  font-size:12px;
-}
+.meta{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:12px; }
 .meta-name{ margin-right:8px; font-weight:600; }
 .meta-time{ color:var(--muted); }
 
-.typing{
-  height:18px;
-  padding-left:16px;
-  color:var(--muted);
-}
+.typing{ height:18px; padding-left:16px; color:var(--muted); }
 
-.composer{
-  padding:12px;
-  display:flex; gap:10px;
-  border-top:1px solid #e5eaf0;
-}
-.composer input{
-  flex:1; padding:12px 16px;
-  border-radius:999px;
-  border:1px solid #cfd6df;
-  font-size:15px;
-}
-.composer button{
-  background:var(--accent);
-  padding:10px 18px;
-  border:none; border-radius:999px;
-  font-weight:600; color:#fff;
-  cursor:pointer;
-}
+.composer{ padding:12px; display:flex; gap:10px; border-top:1px solid #e5eaf0; }
+.emoji-btn{ width:42px; height:42px; border-radius:50%; background:#fff; border:1px solid #d7dce3; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:22px; }
+.emoji-popup{ position:absolute; bottom:90px; left:20px; background:#fff; border:1px solid #ddd; border-radius:12px; padding:10px; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.15); }
+.emoji-popup span{ font-size:24px; padding:6px; display:inline-block; cursor:pointer; }
 
-.emoji-btn{
-  width:42px; height:42px;
-  border-radius:50%;
-  background:#fff;
-  border:1px solid #d7dce3;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer; font-size:22px;
-}
-.emoji-popup{
-  position:absolute; bottom:80px; left:20px;
-  background:#fff; border:1px solid #ddd;
-  border-radius:12px; padding:10px;
-  display:none;
-  box-shadow:0 10px 30px rgba(0,0,0,0.15);
-}
-.emoji-popup span{
-  font-size:24px; padding:6px;
-  display:inline-block; cursor:pointer;
+.dm-tag{ display:inline-block; padding:6px 10px; background:#f3e8ff; border-radius:999px; border:1px solid #e8d7ff; font-weight:600; margin-right:8px; }
+.cancel-dm{ margin-left:8px; color:#b33; cursor:pointer; font-weight:700; }
+
+@media(max-width:700px){
+  .app-title{ font-size:18px; }
+  .popup{ right:10px; top:92px; width:220px; }
+  .emoji-popup{ left:12px; bottom:84px; }
 }
 </style>
 </head>
-
 <body>
 
 <div class="chat">
-
   <div class="header">
     <div class="header-row">
-
-      <div id="onlineBox" class="online-box">Online</div>
+      <div id="onlineBox" class="online-box">0 online</div>
 
       <div class="title-wrap">
-        <div class="app-title">Web Chat</div>
+        <div class="app-title">SRMU Web Chat</div>
         <div id="youAre" class="you-are"></div>
       </div>
 
       <div class="right-wrap">
-        <a href="/about.html" id="aboutBtn" class="about-back">About</a>
-
+        <button id="aboutBtn" class="about-btn">About</button>
+        <a href="https://github.com/webdevpraveen" target="_blank" class="github-icon">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 012 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
       </div>
-
     </div>
   </div>
-
 
   <div id="popup" class="popup">
     <div class="popup-header">
@@ -234,16 +117,20 @@ body{
 
   <div class="composer">
     <div id="emojiBtn" class="emoji-btn">😊</div>
-
     <div id="emojiPopup" class="emoji-popup">
-      <span>😀</span><span>😁</span><span>😂</span><span>🤣</span><span>😍</span><span>😎</span><span>😭</span>
-      <span>👀</span><span>🤔</span><span>👍</span><span>👎</span><span>👋</span><span>♥️</span><span>🌹</span>
+      <span>😀</span><span>😁</span><span>😂</span><span>🤣</span>
+      <span>😍</span><span>😎</span><span>😭</span><span>👀</span>
+      <span>🤔</span><span>👍</span><span>👎</span><span>👋</span>
     </div>
 
-    <input id="input" placeholder="Type your message..." />
+    <div id="dmHolder" style="display:none; align-items:center;">
+      <span id="dmTag" class="dm-tag"></span>
+      <span id="dmCancel" class="cancel-dm">✖</span>
+    </div>
+
+    <input id="input" placeholder="Type your message..." autocomplete="off" />
     <button id="send">Send</button>
   </div>
-
 </div>
 
 <audio id="notif" src="notification.mp3" preload="auto"></audio>
@@ -259,38 +146,45 @@ if(!userId){
 }
 document.getElementById("youAre").textContent = "You are: " + userId;
 
-const messages=document.getElementById("messages");
-const typing=document.getElementById("typing");
-const popup=document.getElementById("popup");
-const popupList=document.getElementById("popupList");
-const notif=document.getElementById("notif");
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
+const popup = document.getElementById("popup");
+const popupList = document.getElementById("popupList");
+const notif = document.getElementById("notif");
+const dmHolder = document.getElementById("dmHolder");
+const dmTag = document.getElementById("dmTag");
+const dmCancel = document.getElementById("dmCancel");
+let dmTarget = null;
 
-const nameColors={};
-const pastel=["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
+const nameColors = {};
+const pastel = ["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
 function nameColor(uid){
   if(nameColors[uid]) return nameColors[uid];
   return nameColors[uid]=pastel[Math.floor(Math.random()*pastel.length)];
 }
 
 let soundReady=false;
-function ready(){
-  if(soundReady) return;
-  notif.play().then(()=>{notif.pause();notif.currentTime=0;soundReady=true;});
-}
+function ready(){ if(soundReady) return; notif.play().then(()=>{notif.pause();notif.currentTime=0;soundReady=true;}); }
 window.addEventListener("click",ready);
 
-const params=new URLSearchParams(location.search);
-const isAdmin=params.get("admin")==="supersecret123";
+const params = new URLSearchParams(location.search);
+const isAdmin = params.get("admin")==="supersecret123";
 if(isAdmin) document.getElementById("adminPanel").style.display="flex";
 
 socket.emit("userConnected",userId);
 
-send.onclick=()=>{
-  const t=input.value.trim();
-  if(!t)return;
-  socket.emit("chatMessage",{userId,text:t});
+document.getElementById("send").onclick = ()=>{
+  const t = input.value.trim();
+  if(!t) return;
+  if(dmTarget){
+    socket.emit("privateMessage",{ from:userId, to:dmTarget, text:t });
+    dmTarget = null;
+    dmHolder.style.display="none";
+  } else {
+    socket.emit("chatMessage",{ userId, text:t });
+  }
   input.value="";
-  socket.emit("stopTyping",userId);
+  socket.emit("stopTyping", userId);
 };
 input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") send.click(); });
 
@@ -302,96 +196,108 @@ input.addEventListener("input",()=>{
 });
 
 function addMsg(m){
-  const row=document.createElement("div");
-  row.className="msg-row "+(m.userId===userId?"right":"left");
+  const row = document.createElement("div");
+  row.className = "msg-row " + ( (m.userId===userId || (m.from && m.from===userId)) ? "right" : "left" );
 
-  const b=document.createElement("div");
-  b.className="bubble";
+  const b = document.createElement("div");
+  b.className = "bubble";
 
   if(m.isWelcome) b.classList.add("welcome");
-  else if(isAdmin && m.userId===userId){
-    b.classList.add("admin");
-    m.userId="👑 Admin ("+userId+")";
+  else if(m.isAdmin) b.classList.add("admin");
+  else if(m.isDM || m.isDM === true || m.isDM === 'true' || m.isDM === undefined && m.to) {
+    b.classList.add("dm");
   }
   else if(m.userId===userId) b.classList.add("self");
   else b.classList.add("other");
 
-  const meta=document.createElement("div");
-  meta.className="meta";
+  const meta = document.createElement("div");
+  meta.className = "meta";
 
-  const n=document.createElement("div");
-  n.className="meta-name";
-  n.textContent=m.userId==="System"?"System":(m.userId===userId?"You":m.userId);
-  if(m.userId!=="System") n.style.color=nameColor(m.userId);
+  const n = document.createElement("div");
+  n.className = "meta-name";
+  n.textContent = m.userId==="System" ? "System" : (m.userId===userId ? "You" : (m.from? m.from : m.userId));
+  if(n.textContent !== "System") n.style.color = nameColor(n.textContent);
 
-  const t=document.createElement("div");
-  t.className="meta-time";
-  t.textContent=m.timestamp||"";
+  const t = document.createElement("div");
+  t.className = "meta-time";
+  t.textContent = m.timestamp || "";
 
   meta.appendChild(n);
   meta.appendChild(t);
 
-  const body=document.createElement("div");
-  body.textContent=m.text;
+  const body = document.createElement("div");
+  if(m.isDM || m.isDM === true){
+    const note = document.createElement("div");
+    note.style.fontSize = "12px";
+    note.style.color = "var(--muted)";
+    note.style.marginBottom = "6px";
+    if(m.from === userId){
+      note.textContent = "(Private to " + m.to + ")";
+    } else {
+      note.textContent = "(Private from " + m.from + ")";
+    }
+    body.appendChild(note);
+  }
+  const txt = document.createElement("div");
+  txt.textContent = m.text;
+  body.appendChild(txt);
 
   b.appendChild(meta);
   b.appendChild(body);
   row.appendChild(b);
   messages.appendChild(row);
-  messages.scrollTop=messages.scrollHeight;
+  messages.scrollTop = messages.scrollHeight;
 
-  if(m.userId!==userId && !m.isWelcome && soundReady){
-    notif.currentTime=0;
-    notif.play();
+  if((m.userId && m.userId!==userId) || (m.from && m.from!==userId)){
+    if(!m.isDM && soundReady){
+      notif.currentTime = 0;
+      notif.play();
+    }
   }
 }
 
-socket.on("chatMessage",(m)=>addMsg(m));
+socket.on("chatMessage",(m)=> addMsg(m));
+socket.on("privateMessage",(m)=> addMsg(m));
 
-socket.on("userTyping",(uid)=>{
-  if(uid!==userId) typing.textContent=uid+" is typing...";
-});
-socket.on("userStopTyping",()=>typing.textContent="");
+socket.on("userTyping",(uid)=>{ if(uid!==userId) typing.textContent = uid + " is typing..."; });
+socket.on("userStopTyping",()=> typing.textContent = "");
 
-socket.on("userJoinedEvent",(uid)=>{
-  const e=document.createElement("div");
-  e.className="event";
-  e.textContent="🟢 "+uid+" joined";
-  messages.appendChild(e);
-});
+socket.on("userJoinedEvent",(uid)=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🟢 "+uid+" joined"; messages.appendChild(e); messages.scrollTop=messages.scrollHeight; });
 
 socket.on("onlineList",(list)=>{
-  onlineBox.textContent=list.length+" Online";
-  popupList.innerHTML="";
+  onlineBox.textContent = list.length + " online";
+  popupList.innerHTML = "";
   list.forEach(u=>{
-    const d=document.createElement("div");
-    d.textContent=u;
+    const d = document.createElement("div");
+    d.textContent = u;
+    const btn = document.createElement("button");
+    btn.className = "msg-button";
+    btn.textContent = "Message";
+    btn.onclick = ()=>{
+      if(u === userId) return alert("Can't DM yourself");
+      dmTarget = u;
+      dmTag.textContent = "DM to " + u;
+      dmHolder.style.display = "inline-flex";
+      input.focus();
+    };
+    d.appendChild(btn);
     popupList.appendChild(d);
   });
 });
 
-const onlineBox=document.getElementById("onlineBox");
-onlineBox.onclick=()=>popup.style.display="block";
-document.getElementById("closePopup").onclick=()=>popup.style.display="none";
+const onlineBox = document.getElementById("onlineBox");
+onlineBox.onclick = ()=> popup.style.display = "block";
+document.getElementById("closePopup").onclick = ()=> popup.style.display = "none";
 
-clearChat.onclick=()=>socket.emit("adminClearChat");
-muteAll.onclick=()=>socket.emit("adminMuteAll");
-unmuteAll.onclick=()=>socket.emit("adminUnmuteAll");
+dmCancel.onclick = ()=>{ dmTarget = null; dmHolder.style.display = "none"; };
 
-socket.on("clearChatNow",()=>messages.innerHTML="");
-socket.on("muteAllNow",()=>{const e=document.createElement("div");e.className="event";e.textContent="Muted all users";messages.appendChild(e);});
-socket.on("unmuteAllNow",()=>{const e=document.createElement("div");e.className="event";e.textContent="Unmuted users";messages.appendChild(e);});
+clearChat.onclick = ()=> socket.emit("adminClearChat");
+muteAll.onclick = ()=> socket.emit("adminMuteAll");
+unmuteAll.onclick = ()=> socket.emit("adminUnmuteAll");
 
-emojiBtn.onclick=()=>{ emojiPopup.style.display = emojiPopup.style.display==="block" ? "none":"block"; };
-
-emojiPopup.onclick=(e)=>{
-  if(e.target.tagName==="SPAN"){
-    input.value += e.target.textContent;
-    emojiPopup.style.display="none";
-    input.focus();
-  }
-};
+socket.on("clearChatNow",()=> messages.innerHTML = "");
+socket.on("muteAllNow",()=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🔇 Admin muted all users"; messages.appendChild(e); });
+socket.on("unmuteAllNow",()=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🔊 Admin unmuted users"; messages.appendChild(e); });
 </script>
-
 </body>
 </html>
