@@ -21,6 +21,10 @@ function istTimestamp() {
   return `${hr}:${min} ${ampm}`;
 }
 
+function makeId() {
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,9);
+}
+
 io.on("connection", (socket) => {
 
   socket.on("userConnected", (userId) => {
@@ -47,7 +51,9 @@ io.on("connection", (socket) => {
 
   socket.on("privateMessage", (data) => {
     if (mutedUsers.has("all") || mutedUsers.has(data.from) || mutedUsers.has(data.to)) return;
+    const id = makeId();
     const msg = {
+      id,
       from: data.from,
       to: data.to,
       text: data.text,
@@ -59,6 +65,20 @@ io.on("connection", (socket) => {
       io.to(targetSocketId).emit("privateMessage", msg);
     }
     socket.emit("privateMessage", msg);
+  });
+
+  socket.on("dmDeliveredAck", (data) => {
+    const targetSocketId = userSockets[data.to];
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("dmDelivered", { id: data.id, to: data.to, from: data.from, timestamp: istTimestamp() });
+    }
+  });
+
+  socket.on("dmSeen", (data) => {
+    const targetSocketId = userSockets[data.to];
+    if (targetSocketId) {
+      io.to(targetSocketId).emit("dmSeen", { id: data.id, to: data.to, from: data.from, timestamp: istTimestamp() });
+    }
   });
 
   socket.on("pinMessage", (text) => {

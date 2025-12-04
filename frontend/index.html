@@ -13,17 +13,8 @@
   --text:#111827; --radius:12px;
 }
 *{ box-sizing:border-box; }
-body{
-  margin:0; background:var(--bg);
-  font-family:Inter,Arial; display:flex; justify-content:center; align-items:center;
-  height:100vh; color:var(--text);
-}
-.chat{
-  width:100%; max-width:980px; height:92vh;
-  background:var(--panel); border-radius:12px;
-  box-shadow:0 12px 30px rgba(25,35,45,0.08);
-  display:flex; flex-direction:column; overflow:hidden;
-}
+body{ margin:0; background:var(--bg); font-family:Inter,Arial; display:flex; justify-content:center; align-items:center; height:100vh; color:var(--text); }
+.chat{ width:100%; max-width:980px; height:92vh; background:var(--panel); border-radius:12px; box-shadow:0 12px 30px rgba(25,35,45,0.08); display:flex; flex-direction:column; overflow:hidden; }
 .header{ padding:10px 16px; border-bottom:1px solid #e5eaf0; background:#fff; }
 .header-row{ display:flex; justify-content:space-between; align-items:center; width:100%; }
 .online-box{ padding:6px 12px; background:#fff; border:1px solid #e5eaf0; border-radius:10px; font-weight:600; cursor:pointer; white-space:nowrap; }
@@ -38,43 +29,38 @@ body{
 .close-btn{ cursor:pointer; font-size:18px; }
 .popup-list div{ padding:8px 12px; border-bottom:1px solid #f5f5f5; display:flex; justify-content:space-between; align-items:center; gap:8px; }
 .msg-button{ padding:6px 8px; border-radius:6px; border:1px solid #e6eef6; background:#fff; cursor:pointer; font-size:13px; }
-
 .admin-panel{ padding:10px; display:none; gap:8px; border-bottom:1px solid #e5eaf0; }
 .admin-panel button{ padding:6px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px; }
-
 .messages{ flex:1; padding:18px; overflow:auto; display:flex; flex-direction:column; gap:12px; }
 .event{ text-align:center; font-size:13px; color:var(--muted); }
-
 .msg-row{ display:flex; }
 .left{ justify-content:flex-start; }
 .right{ justify-content:flex-end; }
-
-.bubble{ max-width:75%; padding:10px 14px; border-radius:var(--radius); font-size:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); }
+.bubble{ max-width:75%; padding:10px 14px; border-radius:var(--radius); font-size:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06); position:relative; }
 .self{ background:var(--self); }
 .other{ background:var(--other); }
 .admin{ background:var(--admin); border-left:4px solid #ff6b6b; }
 .welcome{ background:var(--welcome); }
 .dm{ border:2px dashed rgba(120,80,200,0.12); }
-
 .meta{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:12px; }
 .meta-name{ margin-right:8px; font-weight:600; }
 .meta-time{ color:var(--muted); }
-
 .typing{ height:18px; padding-left:16px; color:var(--muted); }
-
-.composer{ padding:12px; display:flex; gap:10px; border-top:1px solid #e5eaf0; }
-.emoji-btn{ width:42px; height:42px; border-radius:50%; background:#fff; border:1px solid #d7dce3; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:22px; }
+.composer{ padding:10px 14px; display:flex; align-items:center; gap:10px; border-top:1px solid #e5eaf0; background:#fafbfd; }
+.composer input{ flex:1; padding:12px 16px; border-radius:14px; border:1px solid #cfd6df; background:#fff; font-size:15px; transition:0.2s; }
+.composer input:focus{ border-color:#a7b3c2; box-shadow:0 0 0 2px rgba(43,124,255,0.15); outline:none; }
+.composer button{ background:var(--accent); padding:10px 20px; border:none; border-radius:14px; font-weight:600; color:#fff; cursor:pointer; transition:0.2s; }
+.emoji-btn{ width:44px; height:44px; border-radius:14px; background:#fff; border:1px solid #d7dce3; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:22px; transition:0.2s; }
+.emoji-btn:hover{ background:#f0f2f5; }
 .emoji-popup{ position:absolute; bottom:90px; left:20px; background:#fff; border:1px solid #ddd; border-radius:12px; padding:10px; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.15); }
 .emoji-popup span{ font-size:24px; padding:6px; display:inline-block; cursor:pointer; }
-
-.dm-tag{ display:inline-block; padding:6px 10px; background:#f3e8ff; border-radius:999px; border:1px solid #e8d7ff; font-weight:600; margin-right:8px; }
-.cancel-dm{ margin-left:8px; color:#b33; cursor:pointer; font-weight:700; }
-
-@media(max-width:700px){
-  .app-title{ font-size:18px; }
-  .popup{ right:10px; top:92px; width:220px; }
-  .emoji-popup{ left:12px; bottom:84px; }
-}
+#dmHolder{ display:none; align-items:center; }
+.dm-tag{ padding:6px 12px; background:#f3e8ff; border-radius:10px; border:1px solid #e8d7ff; font-weight:600; }
+.cancel-dm{ margin-left:8px; color:#d54949; cursor:pointer; font-weight:700; }
+.tick{ font-size:12px; color:rgba(0,0,0,0.35); margin-left:8px; }
+.tick.delivered{ color:rgba(0,0,0,0.45); }
+.tick.seen{ color:#1e90ff; }
+@media(max-width:700px){ .app-title{ font-size:18px; } .popup{ right:10px; top:92px; width:220px; } .emoji-popup{ left:12px; bottom:84px; } }
 </style>
 </head>
 <body>
@@ -83,12 +69,10 @@ body{
   <div class="header">
     <div class="header-row">
       <div id="onlineBox" class="online-box">0 online</div>
-
       <div class="title-wrap">
         <div class="app-title">SRMU Web Chat</div>
         <div id="youAre" class="you-are"></div>
       </div>
-
       <div class="right-wrap">
         <button id="aboutBtn" class="about-btn">About</button>
         <a href="https://github.com/webdevpraveen" target="_blank" class="github-icon">
@@ -99,10 +83,7 @@ body{
   </div>
 
   <div id="popup" class="popup">
-    <div class="popup-header">
-      Online Users
-      <div id="closePopup" class="close-btn">×</div>
-    </div>
+    <div class="popup-header">Online Users<div id="closePopup" class="close-btn">×</div></div>
     <div id="popupList" class="popup-list"></div>
   </div>
 
@@ -123,7 +104,7 @@ body{
       <span>🤔</span><span>👍</span><span>👎</span><span>👋</span>
     </div>
 
-    <div id="dmHolder" style="display:none; align-items:center;">
+    <div id="dmHolder">
       <span id="dmTag" class="dm-tag"></span>
       <span id="dmCancel" class="cancel-dm">✖</span>
     </div>
@@ -146,46 +127,44 @@ if(!userId){
 }
 document.getElementById("youAre").textContent = "You are: " + userId;
 
-const messages = document.getElementById("messages");
-const typing = document.getElementById("typing");
-const popup = document.getElementById("popup");
-const popupList = document.getElementById("popupList");
-const notif = document.getElementById("notif");
-const dmHolder = document.getElementById("dmHolder");
-const dmTag = document.getElementById("dmTag");
-const dmCancel = document.getElementById("dmCancel");
-let dmTarget = null;
+const messages=document.getElementById("messages");
+const typing=document.getElementById("typing");
+const popup=document.getElementById("popup");
+const popupList=document.getElementById("popupList");
+const notif=document.getElementById("notif");
+const dmHolder=document.getElementById("dmHolder");
+const dmTag=document.getElementById("dmTag");
+const dmCancel=document.getElementById("dmCancel");
 
-const nameColors = {};
-const pastel = ["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
-function nameColor(uid){
-  if(nameColors[uid]) return nameColors[uid];
-  return nameColors[uid]=pastel[Math.floor(Math.random()*pastel.length)];
-}
+let dmTarget=null;
+const nameColors={};
+const pastel=["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
+function nameColor(uid){ if(nameColors[uid]) return nameColors[uid]; return nameColors[uid]=pastel[Math.floor(Math.random()*pastel.length)]; }
 
 let soundReady=false;
 function ready(){ if(soundReady) return; notif.play().then(()=>{notif.pause();notif.currentTime=0;soundReady=true;}); }
 window.addEventListener("click",ready);
 
-const params = new URLSearchParams(location.search);
-const isAdmin = params.get("admin")==="supersecret123";
+const params=new URLSearchParams(location.search);
+const isAdmin=params.get("admin")==="supersecret123";
 if(isAdmin) document.getElementById("adminPanel").style.display="flex";
 
 socket.emit("userConnected",userId);
 
-document.getElementById("send").onclick = ()=>{
-  const t = input.value.trim();
+const sentMsgMap={};
+
+send.onclick=()=>{
+  const t=input.value.trim();
   if(!t) return;
   if(dmTarget){
-    socket.emit("privateMessage",{ from:userId, to:dmTarget, text:t });
-    dmTarget = null;
-    dmHolder.style.display="none";
+    socket.emit("privateMessage",{from:userId,to:dmTarget,text:t});
   } else {
-    socket.emit("chatMessage",{ userId, text:t });
+    socket.emit("chatMessage",{userId,text:t});
   }
   input.value="";
-  socket.emit("stopTyping", userId);
+  socket.emit("stopTyping",userId);
 };
+
 input.addEventListener("keydown",(e)=>{ if(e.key==="Enter") send.click(); });
 
 let timer;
@@ -195,89 +174,113 @@ input.addEventListener("input",()=>{
   timer=setTimeout(()=>socket.emit("stopTyping",userId),500);
 });
 
-function addMsg(m){
-  const row = document.createElement("div");
-  row.className = "msg-row " + ( (m.userId===userId || (m.from && m.from===userId)) ? "right" : "left" );
+function createTickSpan(status){
+  const s=document.createElement("span");
+  s.className="tick";
+  if(status==="delivered") s.classList.add("delivered");
+  if(status==="seen") s.classList.add("seen");
+  s.textContent = status==="seen" ? "✓✓" : (status==="delivered" ? "✓" : "");
+  return s;
+}
 
-  const b = document.createElement("div");
-  b.className = "bubble";
+function addMsg(m){
+  const row=document.createElement("div");
+  row.className="msg-row "+((m.userId===userId||(m.from&&m.from===userId))?"right":"left");
+
+  const b=document.createElement("div");
+  b.className="bubble";
 
   if(m.isWelcome) b.classList.add("welcome");
   else if(m.isAdmin) b.classList.add("admin");
-  else if(m.isDM || m.isDM === true || m.isDM === 'true' || m.isDM === undefined && m.to) {
-    b.classList.add("dm");
-  }
+  else if(m.isDM||m.to) b.classList.add("dm");
   else if(m.userId===userId) b.classList.add("self");
   else b.classList.add("other");
 
-  const meta = document.createElement("div");
-  meta.className = "meta";
+  const meta=document.createElement("div");
+  meta.className="meta";
 
-  const n = document.createElement("div");
-  n.className = "meta-name";
-  n.textContent = m.userId==="System" ? "System" : (m.userId===userId ? "You" : (m.from? m.from : m.userId));
-  if(n.textContent !== "System") n.style.color = nameColor(n.textContent);
+  const name=document.createElement("div");
+  name.className="meta-name";
+  name.textContent=m.from? (m.from===userId?"You":m.from) : (m.userId===userId?"You":m.userId);
+  name.style.color=name.textContent==="You"?"inherit":nameColor(name.textContent);
 
-  const t = document.createElement("div");
-  t.className = "meta-time";
-  t.textContent = m.timestamp || "";
+  const time=document.createElement("div");
+  time.className="meta-time";
+  time.textContent=m.timestamp||"";
 
-  meta.appendChild(n);
-  meta.appendChild(t);
+  meta.appendChild(name);
+  meta.appendChild(time);
 
-  const body = document.createElement("div");
-  if(m.isDM || m.isDM === true){
-    const note = document.createElement("div");
-    note.style.fontSize = "12px";
-    note.style.color = "var(--muted)";
-    note.style.marginBottom = "6px";
-    if(m.from === userId){
-      note.textContent = "(Private to " + m.to + ")";
-    } else {
-      note.textContent = "(Private from " + m.from + ")";
-    }
+  const body=document.createElement("div");
+  if(m.isDM){
+    const note=document.createElement("div");
+    note.style.fontSize="12px"; note.style.color="var(--muted)"; note.style.marginBottom="6px";
+    note.textContent=m.from===userId? "(Private to "+m.to+")" : "(Private from "+m.from+")";
     body.appendChild(note);
   }
-  const txt = document.createElement("div");
-  txt.textContent = m.text;
+  const txt=document.createElement("div");
+  txt.textContent=m.text;
   body.appendChild(txt);
 
   b.appendChild(meta);
   b.appendChild(body);
+
+  if((m.from && m.from===userId) || (m.userId && m.userId===userId && m.isDM)){
+    const tick=createTickSpan("");
+    tick.dataset.msgId = m.id || "";
+    b.appendChild(tick);
+    if(m.id) sentMsgMap[m.id]=tick;
+  }
+
   row.appendChild(b);
   messages.appendChild(row);
-  messages.scrollTop = messages.scrollHeight;
+  messages.scrollTop=messages.scrollHeight;
 
-  if((m.userId && m.userId!==userId) || (m.from && m.from!==userId)){
-    if(!m.isDM && soundReady){
-      notif.currentTime = 0;
-      notif.play();
-    }
+  if((m.userId&&m.userId!==userId)||(m.from&&m.from!==userId)){
+    if(!m.isDM&&soundReady){ notif.currentTime=0; notif.play(); }
+  }
+
+  if(m.isDM && m.from && m.from!==userId){
+    socket.emit("dmDeliveredAck",{ id: m.id, from: m.from, to: m.to || userId });
+  }
+  if(m.isDM && m.from && m.from!==userId && document.hasFocus()){
+    socket.emit("dmSeen",{ id: m.id, from: m.from, to: m.to || userId });
   }
 }
 
-socket.on("chatMessage",(m)=> addMsg(m));
-socket.on("privateMessage",(m)=> addMsg(m));
+socket.on("chatMessage",(m)=>addMsg(m));
+socket.on("privateMessage",(m)=>addMsg(m));
+
+socket.on("dmDelivered",(data)=>{
+  const el = sentMsgMap[data.id];
+  if(el){ el.textContent = "✓"; el.classList.add("delivered"); }
+});
+
+socket.on("dmSeen",(data)=>{
+  const el = sentMsgMap[data.id];
+  if(el){ el.textContent = "✓✓"; el.classList.remove("delivered"); el.classList.add("seen"); }
+});
 
 socket.on("userTyping",(uid)=>{ if(uid!==userId) typing.textContent = uid + " is typing..."; });
-socket.on("userStopTyping",()=> typing.textContent = "");
+socket.on("userStopTyping",()=>typing.textContent="");
 
-socket.on("userJoinedEvent",(uid)=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🟢 "+uid+" joined"; messages.appendChild(e); messages.scrollTop=messages.scrollHeight; });
+document.getElementById("onlineBox").onclick=()=> popup.style.display="block";
+document.getElementById("closePopup").onclick=()=> popup.style.display="none";
 
 socket.on("onlineList",(list)=>{
-  onlineBox.textContent = list.length + " online";
-  popupList.innerHTML = "";
+  onlineBox.textContent=list.length+" online";
+  popupList.innerHTML="";
   list.forEach(u=>{
-    const d = document.createElement("div");
-    d.textContent = u;
-    const btn = document.createElement("button");
-    btn.className = "msg-button";
-    btn.textContent = "Message";
-    btn.onclick = ()=>{
-      if(u === userId) return alert("Can't DM yourself");
-      dmTarget = u;
-      dmTag.textContent = "DM to " + u;
-      dmHolder.style.display = "inline-flex";
+    const d=document.createElement("div");
+    d.textContent=u;
+    const btn=document.createElement("button");
+    btn.className="msg-button";
+    btn.textContent="Message";
+    btn.onclick=()=>{
+      if(u===userId) return alert("You can't DM yourself");
+      dmTarget=u;
+      dmTag.textContent="DM → "+u;
+      dmHolder.style.display="flex";
       input.focus();
     };
     d.appendChild(btn);
@@ -285,17 +288,13 @@ socket.on("onlineList",(list)=>{
   });
 });
 
-const onlineBox = document.getElementById("onlineBox");
-onlineBox.onclick = ()=> popup.style.display = "block";
-document.getElementById("closePopup").onclick = ()=> popup.style.display = "none";
+dmCancel.onclick=()=>{ dmTarget=null; dmHolder.style.display="none"; };
 
-dmCancel.onclick = ()=>{ dmTarget = null; dmHolder.style.display = "none"; };
+clearChat.onclick=()=> socket.emit("adminClearChat");
+muteAll.onclick=()=> socket.emit("adminMuteAll");
+unmuteAll.onclick=()=> socket.emit("adminUnmuteAll");
 
-clearChat.onclick = ()=> socket.emit("adminClearChat");
-muteAll.onclick = ()=> socket.emit("adminMuteAll");
-unmuteAll.onclick = ()=> socket.emit("adminUnmuteAll");
-
-socket.on("clearChatNow",()=> messages.innerHTML = "");
+socket.on("clearChatNow",()=> messages.innerHTML="");
 socket.on("muteAllNow",()=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🔇 Admin muted all users"; messages.appendChild(e); });
 socket.on("unmuteAllNow",()=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🔊 Admin unmuted users"; messages.appendChild(e); });
 </script>
