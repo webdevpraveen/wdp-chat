@@ -39,7 +39,7 @@ wdp-chat/
 
 ## 🛠️ Tech Stack
 - **Frontend:** HTML, CSS, JavaScript  
-- **Backend:** Node.js, Express.js  
+- **Backend:** Node.js  
 - **Real-time Engine:** Socket.io  
 - **Hosting:** Vercel (frontend), Render (backend)
 
