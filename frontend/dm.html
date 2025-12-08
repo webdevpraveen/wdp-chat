@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Private Chat</title>
+<style>
+body{font-family:Inter,Arial;background:#f3f5f8;margin:0;padding:12px;}
+.container{max-width:720px;margin:20px auto;background:#fff;padding:12px;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,0.08);}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.messages{height:350px;overflow:auto;border:1px solid #eee;padding:8px;border-radius:8px;background:#fafbfd;}
+.composer{display:flex;gap:8px;margin-top:8px;}
+.composer input{flex:1;padding:8px;border-radius:8px;border:1px solid #ddd;}
+button{padding:8px 12px;border-radius:8px;background:#2b7cff;color:#fff;border:none;cursor:pointer;}
+.msg{margin:6px 0;padding:8px;border-radius:8px;background:#e8f7e8;}
+.msg.other{background:#eef2ff;}
+.meta{font-size:12px;color:#666;margin-bottom:6px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div id="roomTitle">Private Chat</div>
+    <div id="roomInfo"></div>
+  </div>
+  <div id="msgs" class="messages"></div>
+  <div class="composer">
+    <input id="m" placeholder="Type a message..." />
+    <button id="send">Send</button>
+  </div>
+</div>
+
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const room = params.get("room");
+const a = params.get("a");
+const b = params.get("b");
+const me = localStorage.getItem("uid") || ("User-" + Math.floor(10000 + Math.random()*90000));
+localStorage.setItem("uid", me);
+
+document.getElementById("roomTitle").textContent = "Private: " + (a===me ? b : a);
+document.getElementById("roomInfo").textContent = "You: " + me;
+
+const socket = io("https://wdp-chat.onrender.com");
+socket.emit("userConnected", me);
+
+const msgs = document.getElementById("msgs");
+
+function add(m, cls){
+  const d = document.createElement("div");
+  d.className = "msg " + (cls || "");
+  const meta = document.createElement("div"); meta.className = "meta";
+  meta.textContent = m.from + " • " + (m.timestamp || "");
+  const txt = document.createElement("div"); txt.textContent = m.text;
+  d.appendChild(meta); d.appendChild(txt);
+  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
+}
+
+document.getElementById("send").onclick = ()=> {
+  const text = document.getElementById("m").value.trim();
+  if(!text) return;
+  socket.emit("privateMessage", { from: me, to: (me===a? b : a), text });
+  add({ from: "You", text, timestamp: new Date().toLocaleTimeString() }, "");
+  document.getElementById("m").value = "";
+};
+
+socket.on("privateMessage", m => {
+  if(m.from === me || m.to === me) {
+    add(m, m.from === me ? "" : "other");
+  }
+});
+</script>
+</body>
+</html>

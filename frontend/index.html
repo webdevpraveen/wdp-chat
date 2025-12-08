@@ -12,146 +12,63 @@
   --accent:#2b7cff; --muted:#6b7280;
   --text:#111827; --radius:12px;
 }
-*{ box-sizing:border-box; }
-body{
-  margin:0; background:var(--bg);
-  font-family:Inter,Arial; display:flex; justify-content:center; align-items:center;
-  height:100vh; color:var(--text);
-}
-.chat{
-  width:100%; max-width:980px; height:92vh;
-  background:var(--panel); border-radius:12px;
-  box-shadow:0 12px 30px rgba(25,35,45,0.08);
-  display:flex; flex-direction:column; overflow:hidden;
-}
-
-/* HEADER */
-.header{ padding:10px 16px; border-bottom:1px solid #e5eaf0; background:#fff; }
-.header-row{ display:flex; justify-content:space-between; align-items:center; }
-.online-box{ padding:6px 12px; background:#fff; border:1px solid #e5eaf0; border-radius:10px; font-weight:600; cursor:pointer; }
-.title-wrap{ display:flex; flex-direction:column; align-items:center; }
-.app-title{ font-size:20px; font-weight:700; }
-.you-are{ font-size:13px; color:#6b7280; margin-top:2px; }
-.right-wrap{ display:flex; gap:12px; align-items:center; }
-.about-btn{ padding:6px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; font-size:13px; }
-.github-icon{ width:36px; height:36px; border-radius:50%; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:flex; align-items:center; justify-content:center; }
-
-/* ONLINE POPUP */
-.popup{ position:absolute; right:16px; top:95px; width:260px; background:#fff; border-radius:10px; box-shadow:0 12px 40px rgba(0,0,0,0.15); display:none; z-index:50; }
-.popup-header{ padding:10px 12px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; }
-.close-btn{ cursor:pointer; font-size:18px; }
-.popup-list div{ padding:8px 12px; border-bottom:1px solid #f5f5f5; display:flex; justify-content:space-between; }
-
-/* ADMIN PANEL */
-.admin-panel{ padding:10px; display:none; gap:8px; border-bottom:1px solid #e5eaf0; }
-.admin-panel button{ padding:6px 12px; border-radius:8px; border:1px solid #ddd; background:#fff; cursor:pointer; }
-
-/* MESSAGES */
-.messages{ flex:1; padding:18px; overflow:auto; display:flex; flex-direction:column; gap:12px; }
-.event{ text-align:center; font-size:13px; color:var(--muted); }
-
-.msg-row{ display:flex; }
-.left{ justify-content:flex-start; }
-.right{ justify-content:flex-end; }
-
-.bubble{ max-width:75%; padding:10px 14px; border-radius:var(--radius); box-shadow:0 4px 16px rgba(0,0,0,0.06); }
-.self{ background:var(--self); }
-.other{ background:var(--other); }
-.admin{ background:var(--admin); border-left:4px solid #ff6b6b; }
-.welcome{ background:var(--welcome); }
-.dm{ border:2px dashed rgba(120,80,200,0.12); }
-
-.meta{ display:flex; justify-content:space-between; margin-bottom:6px; font-size:12px; }
-.meta-name{ font-weight:600; }
-.meta-time{ color:var(--muted); }
-
-.typing{ height:18px; padding-left:16px; color:var(--muted); }
-
-/* COMPOSER */
-.composer{
-  padding:10px 14px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  border-top:1px solid #e5eaf0;
-  background:#fafbfd;
-}
-.composer input{
-  flex:1;
-  padding:12px 16px;
-  border-radius:14px;
-  border:1px solid #cfd6df;
-  background:#fff;
-  font-size:15px;
-}
-.composer button{
-  background:var(--accent);
-  padding:10px 20px;
-  border:none;
-  border-radius:14px;
-  font-weight:600;
-  color:#fff;
-  cursor:pointer;
-}
-
-/* EMOJI POPUP */
-.emoji-btn{
-  width:44px; height:44px;
-  border-radius:14px; background:#fff;
-  border:1px solid #d7dce3; font-size:22px;
-  display:flex; align-items:center; justify-content:center;
-  cursor:pointer;
-}
-.emoji-popup{
-  position:absolute; bottom:90px; left:20px;
-  background:#fff; border:1px solid #ddd; border-radius:12px;
-  padding:10px; display:none;
-}
-.emoji-popup span{
-  font-size:24px; padding:6px; cursor:pointer;
-}
-
-/* DM TAG */
-#dmHolder{ display:none; align-items:center; }
-.dm-tag{
-  padding:6px 12px; background:#f3e8ff; border-radius:10px;
-  border:1px solid #e8d7ff; font-weight:600;
-}
-.cancel-dm{ margin-left:8px; color:#d54949; cursor:pointer; }
-
-/* REACTIONS */
-.reaction-popup{
-  position:absolute;
-  background:#fff;
-  padding:6px 10px;
-  border-radius:12px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  display:flex;
-  gap:8px;
-  z-index:80;
-  font-size:22px;
-  display:none;
-}
-.reaction-popup span{
-  cursor:pointer;
-}
-.reaction-bar{
-  display:flex;
-  gap:6px;
-  margin-top:6px;
-}
-.reaction-chip{
-  padding:2px 6px;
-  background:#f0f2f5;
-  border-radius:8px;
-  font-size:13px;
-}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);font-family:Inter,Arial;display:flex;justify-content:center;align-items:center;height:100vh;color:var(--text);}
+.chat{width:100%;max-width:980px;height:92vh;background:var(--panel);border-radius:12px;box-shadow:0 12px 30px rgba(25,35,45,0.08);display:flex;flex-direction:column;overflow:hidden;}
+.header{padding:12px 16px;border-bottom:1px solid #e5eaf0;background:#fff;}
+.header-row{display:flex;justify-content:space-between;align-items:center;}
+.online-box{padding:6px 12px;background:#fff;border:1px solid #e5eaf0;border-radius:10px;font-weight:600;cursor:pointer;}
+.title-center{text-align:center;display:flex;flex-direction:column;align-items:center;}
+.app-title{font-size:20px;font-weight:700;}
+.you-are{font-size:13px;color:#6b7280;margin-top:2px;}
+.right-wrap{display:flex;gap:12px;align-items:center;}
+.about-btn{padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:13px;}
+.popup{position:absolute;right:16px;top:95px;width:260px;background:#fff;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,0.15);display:none;z-index:50;}
+.popup-header{padding:10px 12px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;font-weight:600;}
+.close-btn{cursor:pointer;font-size:18px;}
+.popup-list div{padding:8px 12px;border-bottom:1px solid #f5f5f5;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.msg-button{padding:6px 8px;border-radius:6px;border:1px solid #e6eef6;background:#fff;cursor:pointer;font-size:13px;}
+.admin-panel{padding:10px;display:none;gap:8px;border-bottom:1px solid #e5eaf0;}
+.admin-panel button{padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:13px;}
+.messages{flex:1;padding:18px;overflow:auto;display:flex;flex-direction:column;gap:12px;}
+.event{text-align:center;font-size:13px;color:var(--muted);}
+.msg-row{display:flex;}
+.left{justify-content:flex-start;}
+.right{justify-content:flex-end;}
+.bubble{max-width:75%;padding:10px 14px;border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+.self{background:var(--self);}
+.other{background:var(--other);}
+.admin{background:var(--admin);border-left:4px solid #ff6b6b;}
+.welcome{background:var(--welcome);}
+.dm{border:2px dashed rgba(120,80,200,0.12);}
+.meta{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;}
+.meta-name{font-weight:600;}
+.meta-time{color:var(--muted);}
+.typing{height:18px;padding-left:16px;color:var(--muted);}
+.composer{padding:10px 14px;display:flex;align-items:center;gap:10px;border-top:1px solid #e5eaf0;background:#fafbfd;}
+.composer input{flex:1;padding:12px 16px;border-radius:14px;border:1px solid #cfd6df;background:#fff;font-size:15px;}
+.composer button{background:var(--accent);padding:10px 20px;border:none;border-radius:14px;font-weight:600;color:#fff;cursor:pointer;}
+.emoji-btn{width:44px;height:44px;border-radius:14px;background:#fff;border:1px solid #d7dce3;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:22px;}
+.emoji-popup{position:absolute;bottom:90px;left:20px;background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px;display:none;}
+.emoji-popup span{font-size:24px;padding:6px;cursor:pointer;}
+#dmHolder{display:none;align-items:center;}
+.dm-tag{padding:6px 12px;background:#f3e8ff;border-radius:10px;border:1px solid #e8d7ff;font-weight:600;}
+.cancel-dm{margin-left:8px;color:#d54949;cursor:pointer;font-weight:700;}
+.invite-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border-radius:10px;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,0.25);z-index:200;display:none;width:320px;}
+.invite-header{font-weight:700;margin-bottom:8px;}
+.invite-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}
+.invite-btn{padding:8px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;}
+.invite-accept{background:#2b7cff;color:#fff;border:none;}
+.reaction-popup{position:absolute;background:#fff;padding:6px 10px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.15);display:flex;gap:8px;z-index:80;font-size:22px;display:none;}
+.reaction-popup span{cursor:pointer;}
+.reaction-bar{display:flex;gap:6px;margin-top:6px;}
+.reaction-chip{padding:2px 6px;background:#f0f2f5;border-radius:8px;font-size:13px;}
+@media(max-width:700px){.app-title{font-size:18px}.popup{right:10px;top:92px;width:220px}.emoji-popup{left:12px;bottom:84px}}
 </style>
 </head>
 <body>
 
-<!-- REACTION POPUP -->
-<div id="reactionPopup" class="reaction-popup">
+<div id="reactionPopup" class="reaction-popup" aria-hidden="true">
   <span data-r="👍">👍</span>
   <span data-r="❤️">❤️</span>
   <span data-r="😂">😂</span>
@@ -160,48 +77,45 @@ body{
   <span data-r="😡">😡</span>
 </div>
 
-<div class="chat">
+<div id="inviteModal" class="invite-modal" role="dialog" aria-hidden="true">
+  <div class="invite-header" id="inviteText">User invites you to a private chat</div>
+  <div id="inviteMeta" style="color:var(--muted);font-size:13px"></div>
+  <div class="invite-actions">
+    <button id="inviteDecline" class="invite-btn">Cancel</button>
+    <button id="inviteAccept" class="invite-btn invite-accept">Join</button>
+  </div>
+</div>
 
-  <!-- HEADER -->
+<div class="chat">
   <div class="header">
     <div class="header-row">
       <div id="onlineBox" class="online-box">0 online</div>
-
-      <div class="title-wrap">
+      <div class="title-center">
         <div class="app-title">SRMU Web Chat</div>
         <div id="youAre" class="you-are"></div>
       </div>
-
-    
+      <div class="right-wrap">
+<a href="/frontend/about.html" class="about-btn">About</a>      </div>
     </div>
   </div>
 
-  <!-- POPUP -->
   <div id="popup" class="popup">
-    <div class="popup-header">
-      Online Users
-      <div id="closePopup" class="close-btn">×</div>
-    </div>
+    <div class="popup-header">Online Users <div id="closePopup" class="close-btn">×</div></div>
     <div id="popupList" class="popup-list"></div>
   </div>
 
-  <!-- ADMIN -->
   <div id="adminPanel" class="admin-panel">
     <button id="clearChat">Clear</button>
     <button id="muteAll">Mute</button>
     <button id="unmuteAll">Unmute</button>
   </div>
 
-  <!-- MESSAGES -->
   <div id="messages" class="messages"></div>
   <div id="typing" class="typing"></div>
 
-  <!-- COMPOSER -->
   <div class="composer">
-
     <div id="emojiBtn" class="emoji-btn">😊</div>
-
-    <div id="emojiPopup" class="emoji-popup">
+    <div id="emojiPopup" class="emoji-popup" aria-hidden="true">
       <span>😀</span><span>😁</span><span>😂</span><span>🤣</span>
       <span>😍</span><span>😎</span><span>😭</span><span>👀</span>
       <span>🤔</span><span>👍</span><span>👎</span><span>👋</span>
@@ -212,15 +126,13 @@ body{
       <span id="dmCancel" class="cancel-dm">✖</span>
     </div>
 
-    <input id="input" placeholder="Type your message..." />
+    <input id="input" placeholder="Type your message..." autocomplete="off" />
     <button id="send">Send</button>
-
   </div>
 </div>
 
 <audio id="notif" src="notification.mp3" preload="auto"></audio>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
 <script>
 const socket = io("https://wdp-chat.onrender.com");
 
@@ -229,62 +141,62 @@ if(!userId){
   userId = "User-" + Math.floor(10000 + Math.random()*90000);
   localStorage.setItem("uid",userId);
 }
-youAre.textContent = "You are: " + userId;
+document.getElementById("youAre").textContent = "You are: " + userId;
 
-const messages=document.getElementById("messages");
-const typing=document.getElementById("typing");
-const popup=document.getElementById("popup");
-const popupList=document.getElementById("popupList");
-const notif=document.getElementById("notif");
-const dmHolder=document.getElementById("dmHolder");
-const dmTag=document.getElementById("dmTag");
-const dmCancel=document.getElementById("dmCancel");
-let dmTarget=null;
+const messages = document.getElementById("messages");
+const typing = document.getElementById("typing");
+const popup = document.getElementById("popup");
+const popupList = document.getElementById("popupList");
+const notif = document.getElementById("notif");
+const dmHolder = document.getElementById("dmHolder");
+const dmTag = document.getElementById("dmTag");
+const dmCancel = document.getElementById("dmCancel");
+const inviteModal = document.getElementById("inviteModal");
+const inviteText = document.getElementById("inviteText");
+const inviteMeta = document.getElementById("inviteMeta");
+const inviteAccept = document.getElementById("inviteAccept");
+const inviteDecline = document.getElementById("inviteDecline");
+const reactionPopup = document.getElementById("reactionPopup");
 
-const nameColors={};
-const pastel=["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
+let dmTarget = null;
+let pendingInvite = null;
+
+const nameColors = {};
+const pastel = ["#8e7dff","#ff7dcf","#ffb877","#77baff","#74d39c","#ff8f8f","#b785ff","#8fd1ff"];
 function nameColor(uid){ if(nameColors[uid]) return nameColors[uid]; return nameColors[uid]=pastel[Math.floor(Math.random()*pastel.length)]; }
 
-let soundReady=false;
-window.addEventListener("click",()=>{ 
-  if(!soundReady){ notif.play().then(()=>{notif.pause();notif.currentTime=0; soundReady=true; }); }
-});
+let soundReady = false;
+window.addEventListener("click", ()=>{ if(!soundReady){ notif.play().then(()=>{notif.pause();notif.currentTime=0; soundReady=true;}).catch(()=>{}); }});
 
-const params=new URLSearchParams(location.search);
-const isAdmin=params.get("admin")==="supersecret123";
-if(isAdmin) adminPanel.style.display="flex";
+const params = new URLSearchParams(location.search);
+const isAdmin = params.get("admin")==="supersecret123";
+if(isAdmin) document.getElementById("adminPanel").style.display="flex";
 
-socket.emit("userConnected",userId);
+socket.emit("userConnected", userId);
 
-send.onclick=()=>{
-  const t=input.value.trim();
+document.getElementById("send").onclick = ()=>{
+  const t = document.getElementById("input").value.trim();
   if(!t) return;
-
   if(dmTarget){
-    socket.emit("privateMessage",{from:userId,to:dmTarget,text:t});
+    socket.emit("privateMessage", { from: userId, to: dmTarget, text: t });
   } else {
-    socket.emit("chatMessage",{userId,text:t});
+    socket.emit("chatMessage", { userId, text: t });
   }
-  input.value="";
-  socket.emit("stopTyping",userId);
+  document.getElementById("input").value = "";
+  socket.emit("stopTyping", userId);
 };
 
-input.addEventListener("keydown",e=>{ if(e.key==="Enter") send.click(); });
+document.getElementById("input").addEventListener("keydown", (e)=>{ if(e.key==="Enter") document.getElementById("send").click(); });
 
 let timer;
-input.addEventListener("input",()=>{
-  socket.emit("typing",userId);
-  clearTimeout(timer);
-  timer=setTimeout(()=>socket.emit("stopTyping",userId),500);
-});
+document.getElementById("input").addEventListener("input", ()=>{ socket.emit("typing", userId); clearTimeout(timer); timer = setTimeout(()=>socket.emit("stopTyping", userId), 500); });
 
-/* ADD MESSAGE */
 function addMsg(m){
-  const row=document.createElement("div");
-  row.className="msg-row "+((m.userId===userId||(m.from&&m.from===userId))?"right":"left");
+  const row = document.createElement("div");
+  row.className = "msg-row " + ((m.userId===userId || (m.from && m.from===userId)) ? "right":"left");
 
-  const b=document.createElement("div");
-  b.className="bubble";
+  const b = document.createElement("div");
+  b.className = "bubble";
 
   if(m.isWelcome) b.classList.add("welcome");
   else if(m.isAdmin) b.classList.add("admin");
@@ -292,145 +204,200 @@ function addMsg(m){
   else if(m.userId===userId) b.classList.add("self");
   else b.classList.add("other");
 
-  const meta=document.createElement("div");
-  meta.className="meta";
+  const meta = document.createElement("div");
+  meta.className = "meta";
 
-  const name=document.createElement("div");
-  name.className="meta-name";
-  name.textContent=m.from? (m.from===userId?"You":m.from) : (m.userId===userId?"You":m.userId);
-  if(name.textContent!=="You") name.style.color=nameColor(name.textContent);
+  const name = document.createElement("div");
+  name.className = "meta-name";
+  name.textContent = m.from ? (m.from===userId ? "You" : m.from) : (m.userId===userId ? "You" : m.userId);
+  if(name.textContent !== "You") name.style.color = nameColor(name.textContent);
 
-  const time=document.createElement("div");
-  time.className="meta-time";
-  time.textContent=m.timestamp || "";
+  const time = document.createElement("div");
+  time.className = "meta-time";
+  time.textContent = m.timestamp || "";
 
   meta.appendChild(name);
   meta.appendChild(time);
 
-  const body=document.createElement("div");
+  const body = document.createElement("div");
 
   if(m.isDM){
-    const note=document.createElement("div");
-    note.style.fontSize="12px"; 
-    note.style.color="var(--muted)";
-    note.style.marginBottom="6px";
-    note.textContent=m.from===userId? "(Private to "+m.to+")" : "(Private from "+m.from+")";
+    const note = document.createElement("div");
+    note.style.fontSize = "12px"; note.style.color = "var(--muted)"; note.style.marginBottom = "6px";
+    note.textContent = m.from === userId ? "(Private to "+m.to+")" : "(Private from "+m.from+")";
     body.appendChild(note);
   }
 
-  const txt=document.createElement("div");
-  txt.textContent=m.text;
+  const txt = document.createElement("div");
+  txt.textContent = m.text;
   body.appendChild(txt);
 
   b.appendChild(meta);
   b.appendChild(body);
-
   row.appendChild(b);
   messages.appendChild(row);
-  messages.scrollTop=messages.scrollHeight;
+  messages.scrollTop = messages.scrollHeight;
 
-  if((m.userId&&m.userId!==userId)||(m.from&&m.from!==userId)){
-    if(soundReady){ notif.currentTime=0; notif.play(); }
+  if((m.userId && m.userId !== userId) || (m.from && m.from !== userId)){
+    if(!m.isDM && soundReady){ notif.currentTime = 0; notif.play(); }
   }
 
-  /* === REACTIONS SYSTEM === */
-  b.style.position="relative";
-
-  const reactBar=document.createElement("div");
-  reactBar.className="reaction-bar";
+  /* reactions */
+  b.style.position = "relative";
+  const reactBar = document.createElement("div");
+  reactBar.className = "reaction-bar";
   b.appendChild(reactBar);
+  m._reactions = {};
+  function updateReactions(){ reactBar.innerHTML = ""; for(let emo in m._reactions){ const cnt = m._reactions[emo].size; if(cnt>0){ const chip = document.createElement("div"); chip.className = "reaction-chip"; chip.textContent = emo + " " + cnt; reactBar.appendChild(chip); }}}
+  function toggleReaction(uid, emo){ if(!m._reactions[emo]) m._reactions[emo] = new Set(); if(m._reactions[emo].has(uid)) m._reactions[emo].delete(uid); else m._reactions[emo].add(uid); updateReactions(); }
+  b.oncontextmenu = (e)=>{ e.preventDefault(); openReactionPopup(e, m, toggleReaction); };
+  b.onclick = (e)=>{ if(e.shiftKey) openReactionPopup(e, m, toggleReaction); };
 
-  m._reactions={};
-
-  function updateReactions(){
-    reactBar.innerHTML="";
-    for(let emo in m._reactions){
-      let count=m._reactions[emo].size;
-      if(count>0){
-        let chip=document.createElement("div");
-        chip.className="reaction-chip";
-        chip.textContent=emo+" "+count;
-        reactBar.appendChild(chip);
-      }
-    }
-  }
-
-  function toggleReaction(uid, emo){
-    if(!m._reactions[emo]) m._reactions[emo] = new Set();
-    if(m._reactions[emo].has(uid)) m._reactions[emo].delete(uid);
-    else m._reactions[emo].add(uid);
-    updateReactions();
-  }
-
-  b.oncontextmenu = (e)=>{
-    e.preventDefault();
-    openReactionPopup(e, m);
-  };
-  b.onclick = (e)=>{
-    if(e.shiftKey) openReactionPopup(e, m);
-  };
-
-  function openReactionPopup(e, message){
-    const pop=document.getElementById("reactionPopup");
-    pop.style.left=(e.pageX-60)+"px";
-    pop.style.top=(e.pageY-50)+"px";
-    pop.style.display="flex";
-
-    [...pop.children].forEach(sp=>{
-      sp.onclick=()=>{
-        toggleReaction(userId, sp.dataset.r);
-        pop.style.display="none";
-      };
-    });
-
-    document.body.onclick=(ev)=>{
-      if(!pop.contains(ev.target)) pop.style.display="none";
-    };
-  }
 }
 
-/* SOCKET LISTENERS */
-socket.on("chatMessage", m=>addMsg(m));
-socket.on("privateMessage", m=>addMsg(m));
+/* socket listeners */
+socket.on("chatMessage", m => addMsg(m));
+socket.on("privateMessage", m => addMsg(m));
 
-socket.on("userTyping",uid=>{ if(uid!==userId) typing.textContent=uid+" is typing..."; });
-socket.on("userStopTyping",()=>typing.textContent="");
+socket.on("userTyping", uid => { if(uid !== userId) typing.textContent = uid + " is typing..."; });
+socket.on("userStopTyping", () => typing.textContent = "");
 
-socket.on("onlineList",(list)=>{
-  onlineBox.textContent=list.length+" online";
-  popupList.innerHTML="";
-  list.forEach(u=>{
-    const d=document.createElement("div");
-    d.textContent=u;
-    const btn=document.createElement("button");
-    btn.className="msg-button";
-    btn.textContent="Message";
-    btn.onclick=()=>{
-      if(u===userId) return alert("You can't DM yourself");
-      dmTarget=u;
-      dmTag.textContent="DM → "+u;
-      dmHolder.style.display="flex";
-      input.focus();
+socket.on("userJoinedEvent", uid => {
+  const e = document.createElement("div");
+  e.className = "event";
+  e.textContent = "🟢 " + uid + " joined";
+  messages.appendChild(e);
+  messages.scrollTop = messages.scrollHeight;
+});
+
+socket.on("userLeftEvent", uid => {
+  const e = document.createElement("div");
+  e.className = "event";
+  e.textContent = "🔴 " + uid + " left";
+  messages.appendChild(e);
+  messages.scrollTop = messages.scrollHeight;
+});
+
+/* online list + invite flow */
+socket.on("onlineList", list => {
+  document.getElementById("onlineBox").textContent = list.length + " online";
+  popupList.innerHTML = "";
+  list.forEach(u => {
+    const d = document.createElement("div");
+    d.textContent = u;
+    const btn = document.createElement("button");
+    btn.className = "msg-button";
+    btn.textContent = "Message";
+    btn.onclick = ()=>{
+      if(u === userId) return alert("You can't DM yourself");
+      // send invite
+      socket.emit("dmInvite", { from: userId, to: u });
+      showTemporaryEvent("Invite sent to " + u);
     };
     d.appendChild(btn);
     popupList.appendChild(d);
   });
 });
 
-/* DM cancel */
-dmCancel.onclick=()=>{ dmTarget=null; dmHolder.style.display="none"; };
+function showTemporaryEvent(text){
+  const ev = document.createElement("div");
+  ev.className = "event";
+  ev.textContent = text;
+  messages.appendChild(ev);
+  messages.scrollTop = messages.scrollHeight;
+  setTimeout(()=>{ if(ev.parentNode) ev.parentNode.removeChild(ev); }, 3500);
+}
 
-/* Admin */
-clearChat.onclick=()=> socket.emit("adminClearChat");
-muteAll.onclick=()=> socket.emit("adminMuteAll");
-unmuteAll.onclick=()=> socket.emit("adminUnmuteAll");
+/* incoming invite for recipient */
+socket.on("incomingDmInvite", data => {
+  // data: { from, to, roomId }
+  pendingInvite = data;
+  inviteText.textContent = data.from + " invited you to a private chat";
+  inviteMeta.textContent = "Private chat room will open if you join.";
+  inviteModal.style.display = "block";
+  inviteModal.setAttribute("aria-hidden","false");
+});
 
-socket.on("clearChatNow",()=> messages.innerHTML="");
-socket.on("muteAllNow",()=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🔇 Admin muted all users"; messages.appendChild(e); });
-socket.on("unmuteAllNow",()=>{ const e=document.createElement("div"); e.className="event"; e.textContent="🔊 Admin unmuted users"; messages.appendChild(e); });
+inviteAccept.onclick = ()=>{
+  if(!pendingInvite) return;
+  socket.emit("dmInviteResponse", { from: pendingInvite.from, to: pendingInvite.to, roomId: pendingInvite.roomId, accept: true });
+  inviteModal.style.display = "none";
+  pendingInvite = null;
+};
 
-onlineBox.onclick=()=> popup.style.display="block";
-closePopup.onclick=()=> popup.style.display="none";
+inviteDecline.onclick = ()=>{
+  if(!pendingInvite) return;
+  socket.emit("dmInviteResponse", { from: pendingInvite.from, to: pendingInvite.to, roomId: pendingInvite.roomId, accept: false });
+  inviteModal.style.display = "none";
+  pendingInvite = null;
+};
+
+/* invite events delivered to inviter and recipient */
+socket.on("dmInviteSent", info => {
+  showTemporaryEvent("Invite sent ("+info.to+")");
+});
+
+socket.on("dmInviteFailed", info => {
+  alert("Invite failed: " + (info.reason || "unknown"));
+});
+
+socket.on("dmInviteDeclined", info => {
+  showTemporaryEvent(info.to + " declined the invite");
+});
+
+socket.on("dmInviteAccepted", info => {
+  // open a new tab for the private room
+  const roomUrl = location.origin + "/dm.html?room=" + encodeURIComponent(info.roomId) + "&a=" + encodeURIComponent(info.from) + "&b=" + encodeURIComponent(info.to);
+  // open in new tab
+  window.open(roomUrl, '_blank');
+  showTemporaryEvent("Private chat opened");
+});
+
+/* popup open/close */
+document.getElementById("onlineBox").onclick = ()=> popup.style.display = "block";
+document.getElementById("closePopup").onclick = ()=> popup.style.display = "none";
+
+/* DM holder cancel remains (for persistent in-group DM mode) */
+dmCancel.onclick = ()=>{ dmTarget = null; dmHolder.style.display = "none"; };
+
+/* admin actions */
+clearChat.onclick = ()=> socket.emit("adminClearChat");
+muteAll.onclick = ()=> socket.emit("adminMuteAll");
+unmuteAll.onclick = ()=> socket.emit("adminUnmuteAll");
+
+socket.on("clearChatNow", ()=> messages.innerHTML = "");
+socket.on("muteAllNow", ()=> showTemporaryEvent("🔇 Admin muted all users"));
+socket.on("unmuteAllNow", ()=> showTemporaryEvent("🔊 Admin unmuted users"));
+
+/* emoji popup */
+document.getElementById("emojiBtn").onclick = ()=> {
+  const ep = document.getElementById("emojiPopup");
+  ep.style.display = ep.style.display === "block" ? "none" : "block";
+};
+document.getElementById("emojiPopup").addEventListener("click", (e)=>{
+  if(e.target.tagName === "SPAN"){
+    document.getElementById("input").value += e.target.textContent;
+    document.getElementById("emojiPopup").style.display = "none";
+    document.getElementById("input").focus();
+  }
+});
+
+/* reactions popup helper */
+function openReactionPopup(e, message, toggleFn){
+  const pop = document.getElementById("reactionPopup");
+  pop.style.left = (e.pageX - 60) + "px";
+  pop.style.top = (e.pageY - 50) + "px";
+  pop.style.display = "flex";
+  [...pop.children].forEach(sp=>{
+    sp.onclick = ()=> {
+      toggleFn(userId, sp.dataset.r);
+      pop.style.display = "none";
+    };
+  });
+  setTimeout(()=> {
+    document.body.onclick = (ev)=>{ if(!pop.contains(ev.target)) pop.style.display = "none"; };
+  }, 10);
+}
 </script>
 </body>
 </html>
