@@ -14,7 +14,6 @@ let adminSockets = new Set();
 let chatHistory = [];
 let dmHistory = [];
 
-// -----------------------
 function makeRoomId() {
   return "dm-" + Math.random().toString(36).slice(2, 9);
 }
@@ -39,12 +38,17 @@ function cleanupOld() {
 
 setInterval(cleanupOld, 60000);
 
-// -----------------------
+app.get("/_ping", (req, res) => {
+  res.status(200).send("ok");
+});
+
 io.on("connection", socket => {
+  console.log("socket connected:", socket.id);
 
   socket.on("registerAdmin", () => {
     adminSockets.add(socket.id);
-    socket.emit("adminUpdateOnline", Object.keys(onlineUsers));
+    io.to(socket.id).emit("adminUpdateOnline", Object.keys(onlineUsers));
+    console.log("admin registered:", socket.id);
   });
 
   socket.on("userConnected", userId => {
@@ -52,9 +56,10 @@ io.on("connection", socket => {
     onlineUsers[userId] = true;
     userSockets[userId] = socket.id;
 
+    console.log("userConnected:", userId, "sid:", socket.id);
+
     io.emit("onlineList", Object.keys(onlineUsers));
     io.emit("userJoinedEvent", userId);
-
     const lastChat = chatHistory.map(m => ({
       userId: m.userId,
       text: m.text,
@@ -62,7 +67,6 @@ io.on("connection", socket => {
       isAdmin: m.isAdmin
     }));
     socket.emit("loadHistory", lastChat);
-
     adminSockets.forEach(sid => {
       io.to(sid).emit("adminUpdateOnline", Object.keys(onlineUsers));
     });
@@ -195,6 +199,8 @@ io.on("connection", socket => {
   socket.on("disconnect", () => {
     const uid = socket.data.userId;
 
+    console.log("socket disconnect:", socket.id, "uid:", uid);
+
     adminSockets.delete(socket.id);
 
     if (uid) {
@@ -210,6 +216,6 @@ io.on("connection", socket => {
   });
 });
 
-http.listen(3000, () => {
-  console.log("Server started on port 3000");
+http.listen(process.env.PORT || 3000, () => {
+  console.log("Server started on port", process.env.PORT || 3000);
 });

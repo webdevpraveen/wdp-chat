@@ -14,41 +14,31 @@
     --muted: #6b7280;
     --radius: 12px;
   }
-  html,body{height:100%;margin:0;font-family:Inter,Arial;color:#111827;background:linear-gradient(180deg,#fffafc 0%, #fff9fb 50%);}
+  html,body{
+    height:100%;margin:0;font-family:Inter,Arial;color:#111827;
+    background:linear-gradient(180deg,#fffafc 0%, #fff9fb 50%);
+  }
   .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
   .container{
-    width:100%;
-    max-width:980px;
-    height:85vh;
-    background:var(--panel);
-    border-radius:14px;
-    box-shadow:0 18px 50px rgba(16,24,40,0.08);
-    position:relative;
-    overflow:hidden;
+    width:100%;max-width:980px;height:85vh;background:var(--panel);
+    border-radius:14px;box-shadow:0 18px 50px rgba(16,24,40,0.08);
+    position:relative;overflow:hidden;
   }
-
-  /* decorative heart background */
   .container::before{
-    content:"";
-    position:absolute;
-    inset:0;
+    content:"";position:absolute;inset:0;
     background: radial-gradient(circle at 20% 20%, rgba(255,110,140,0.05) 0 8%, transparent 10%),
                 radial-gradient(circle at 80% 80%, rgba(255,110,140,0.04) 0 10%, transparent 12%);
     pointer-events:none;
   }
   .big-heart{
-    position:absolute;
-    right:12%;
-    top:6%;
-    width:320px;
-    height:320px;
-    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path fill="%23ffd5e1" d="M23.6 .6c-2.7 0-4.9 1.9-5.6 3.6-.7-1.7-3-3.6-5.6-3.6C6.9 .6 4 4 4 8.1 4 16.3 16 24 16 24s12-7.7 12-15.9c0-4.1-2.9-7.5-4.4-7.5z"/></svg>') center/contain no-repeat;
-    opacity:0.10;
-    transform: rotate(-10deg);
-    pointer-events:none;
+    position:absolute;right:12%;top:6%;width:320px;height:320px;
+    background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path fill="%23ffd5e1" d="M23.6 .6c-2.7 0-4.9 1.9-5.6 3.6-.7-1.7-3-3.6-5.6-3.6C6.9 .6 4 4 4 8.1 4 16.3 16 24 16 24s12-7.7 12-15.9c0-4.1-2.9-7.5-4.4-7.5z"/></svg>') center/contain no-repeat;
+    opacity:0.10;transform:rotate(-10deg);pointer-events:none;
   }
-
-  .header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f2f6;}
+  .header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 18px;border-bottom:1px solid #f0f2f6;
+  }
   .title{font-weight:700;font-size:18px;}
   .sub{color:var(--muted);font-size:13px;}
 
@@ -56,17 +46,29 @@
   .messages{display:flex;flex-direction:column;gap:10px;max-width:100%;}
   .meta{font-size:12px;color:var(--muted);margin-bottom:6px;}
 
-  .msg{max-width:78%;padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04);word-break:break-word;}
+  .msg{
+    max-width:78%;padding:10px 14px;border-radius:12px;
+    box-shadow:0 6px 18px rgba(16,24,40,0.04);word-break:break-word;
+  }
   .you{align-self:flex-end;background:var(--you);border-bottom-right-radius:6px;}
   .them{align-self:flex-start;background:var(--other);border-bottom-left-radius:6px;}
+
   .msg .who{font-weight:700;margin-bottom:6px;font-size:13px;}
   .msg .time{font-size:11px;color:var(--muted);float:right;margin-left:10px;}
 
-  .composer{display:flex;gap:10px;padding:12px;border-top:1px solid #f0f2f6;background:linear-gradient(180deg,#fff,#fff);align-items:center;}
-  .composer input{flex:1;padding:12px 14px;border-radius:999px;border:1px solid #e9edf2;background:#fff;font-size:15px;}
-  .composer button{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:700;}
+  .composer{
+    display:flex;gap:10px;padding:12px;border-top:1px solid #f0f2f6;
+    background:linear-gradient(180deg,#fff,#fff);align-items:center;
+  }
+  .composer input{
+    flex:1;padding:12px 14px;border-radius:999px;border:1px solid #e9edf2;
+    background:#fff;font-size:15px;
+  }
+  .composer button{
+    background:var(--accent);color:#fff;border:none;padding:10px 16px;
+    border-radius:12px;cursor:pointer;font-weight:700;
+  }
 
-  /* responsive */
   @media(max-width:720px){
     .container{height:92vh;border-radius:12px;}
     .big-heart{display:none;}
@@ -76,14 +78,14 @@
 <body>
   <div class="stage">
     <div class="container" role="main">
-      <div class="big-heart" aria-hidden="true"></div>
+      <div class="big-heart"></div>
 
       <div class="header">
         <div>
           <div class="title" id="roomTitle">Private Chat</div>
           <div class="sub" id="roomInfo">You: ...</div>
         </div>
-        <div class="sub" id="connectedInfo">Connected</div>
+        <div class="sub" id="connectedInfo">Connecting...</div>
       </div>
 
       <div id="msgsWrap" class="msgs-wrap">
@@ -100,11 +102,14 @@
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
 (function(){
+
+  /* === Parse URL parameters === */
   const params = new URLSearchParams(location.search);
   const room = params.get("room");
   const a = params.get("a");
   const b = params.get("b");
 
+  /* === Load user ID === */
   let me = localStorage.getItem("uid");
   if(!me){
     me = "User-" + Math.floor(10000 + Math.random()*90000);
@@ -112,24 +117,42 @@
   }
 
   const peer = (me === a ? b : a);
+
   document.getElementById("roomTitle").textContent = "Private: " + (peer || "Chat");
   document.getElementById("roomInfo").textContent = "You: " + me;
 
-  const socket = io("https://wdp-chat.onrender.com");
+  /* === FIXED SOCKET CONNECTION (Render Compatible) === */
+  const socket = io("https://wdp-chat.onrender.com", {
+    transports: ["websocket", "polling"],
+    path: "/socket.io",
+    withCredentials: false
+  });
+
+  socket.on("connect", () => {
+    document.getElementById("connectedInfo").textContent = "Connected";
+    console.log("[DM] Connected", socket.id);
+  });
+
+  socket.on("disconnect", () => {
+    document.getElementById("connectedInfo").textContent = "Disconnected";
+  });
+
+  /* Register user */
   socket.emit("userConnected", me);
 
   const messages = document.getElementById("messages");
   const msgsWrap = document.getElementById("msgsWrap");
-  const connectedInfo = document.getElementById("connectedInfo");
 
   function addMessage(m, cls){
     const el = document.createElement("div");
-    el.className = "msg " + (cls || "");
+    el.className = "msg " + cls;
+
     const who = document.createElement("div");
     who.className = "who";
     who.textContent = (m.from === me) ? "You" : m.from;
+
     const time = document.createElement("span");
-    time.className="time";
+    time.className = "time";
     time.textContent = m.timestamp || "";
     who.appendChild(time);
 
@@ -139,22 +162,22 @@
     el.appendChild(who);
     el.appendChild(text);
     messages.appendChild(el);
-    // scroll to bottom smoothly
+
     msgsWrap.scrollTop = messages.scrollHeight;
   }
 
-  // When sending: do NOT add a local copy. Server will emit privateMessage (to both)
-  document.getElementById("send").onclick = ()=>{
+  /* SEND PRIVATE MESSAGE */
+  document.getElementById("send").onclick = () => {
     const inp = document.getElementById("m");
     const text = inp.value.trim();
     if(!text) return;
-    // ensure peer exists
-    const target = peer;
-    if(!target){
-      alert("No peer specified for this private chat.");
-      return;
-    }
-    socket.emit("privateMessage", { from: me, to: target, text: text });
+
+    socket.emit("privateMessage", {
+      from: me,
+      to: peer,
+      text: text
+    });
+
     inp.value = "";
   };
 
@@ -162,24 +185,22 @@
     if(e.key === "Enter") document.getElementById("send").click();
   });
 
-  // listen for privateMessage from server — display only if relevant (from/to contains me)
+  /* RECEIVE PRIVATE MESSAGE */
   socket.on("privateMessage", (m)=>{
     if(!m) return;
+
     if(m.from === me || m.to === me){
-      // classify: if from me -> you, else -> them
       const cls = (m.from === me) ? "you" : "them";
       addMessage(m, cls);
     }
   });
 
-  // small presence / online update
-  socket.on("onlineList", (list)=>{
+  /* PEER ONLINE/OFFLINE STATUS */
+  socket.on("onlineList", list=>{
     const isOnline = list.includes(peer);
-    connectedInfo.textContent = isOnline ? "Peer online" : "Peer offline";
+    document.getElementById("connectedInfo").textContent =
+      isOnline ? "Peer online" : "Peer offline";
   });
-
-  socket.on("connect", ()=> { connectedInfo.textContent = "Connected"; });
-  socket.on("disconnect", ()=> { connectedInfo.textContent = "Disconnected"; });
 
 })();
 </script>
