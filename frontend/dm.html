@@ -5,71 +5,183 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Private Chat</title>
 <style>
-body{font-family:Inter,Arial;background:#f3f5f8;margin:0;padding:12px;}
-.container{max-width:720px;margin:20px auto;background:#fff;padding:12px;border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,0.08);}
-.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-.messages{height:350px;overflow:auto;border:1px solid #eee;padding:8px;border-radius:8px;background:#fafbfd;}
-.composer{display:flex;gap:8px;margin-top:8px;}
-.composer input{flex:1;padding:8px;border-radius:8px;border:1px solid #ddd;}
-button{padding:8px 12px;border-radius:8px;background:#2b7cff;color:#fff;border:none;cursor:pointer;}
-.msg{margin:6px 0;padding:8px;border-radius:8px;background:#e8f7e8;}
-.msg.other{background:#eef2ff;}
-.meta{font-size:12px;color:#666;margin-bottom:6px;}
+  :root{
+    --bg1: #fff0f4;
+    --panel: #ffffff;
+    --you: #dff7de;
+    --other: #eaf2ff;
+    --accent: #ff6b9a;
+    --muted: #6b7280;
+    --radius: 12px;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,Arial;color:#111827;background:linear-gradient(180deg,#fffafc 0%, #fff9fb 50%);}
+  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .container{
+    width:100%;
+    max-width:980px;
+    height:85vh;
+    background:var(--panel);
+    border-radius:14px;
+    box-shadow:0 18px 50px rgba(16,24,40,0.08);
+    position:relative;
+    overflow:hidden;
+  }
+
+  /* decorative heart background */
+  .container::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: radial-gradient(circle at 20% 20%, rgba(255,110,140,0.05) 0 8%, transparent 10%),
+                radial-gradient(circle at 80% 80%, rgba(255,110,140,0.04) 0 10%, transparent 12%);
+    pointer-events:none;
+  }
+  .big-heart{
+    position:absolute;
+    right:12%;
+    top:6%;
+    width:320px;
+    height:320px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path fill="%23ffd5e1" d="M23.6 .6c-2.7 0-4.9 1.9-5.6 3.6-.7-1.7-3-3.6-5.6-3.6C6.9 .6 4 4 4 8.1 4 16.3 16 24 16 24s12-7.7 12-15.9c0-4.1-2.9-7.5-4.4-7.5z"/></svg>') center/contain no-repeat;
+    opacity:0.10;
+    transform: rotate(-10deg);
+    pointer-events:none;
+  }
+
+  .header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #f0f2f6;}
+  .title{font-weight:700;font-size:18px;}
+  .sub{color:var(--muted);font-size:13px;}
+
+  .msgs-wrap{padding:14px;height:calc(100% - 140px);overflow:auto;}
+  .messages{display:flex;flex-direction:column;gap:10px;max-width:100%;}
+  .meta{font-size:12px;color:var(--muted);margin-bottom:6px;}
+
+  .msg{max-width:78%;padding:10px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(16,24,40,0.04);word-break:break-word;}
+  .you{align-self:flex-end;background:var(--you);border-bottom-right-radius:6px;}
+  .them{align-self:flex-start;background:var(--other);border-bottom-left-radius:6px;}
+  .msg .who{font-weight:700;margin-bottom:6px;font-size:13px;}
+  .msg .time{font-size:11px;color:var(--muted);float:right;margin-left:10px;}
+
+  .composer{display:flex;gap:10px;padding:12px;border-top:1px solid #f0f2f6;background:linear-gradient(180deg,#fff,#fff);align-items:center;}
+  .composer input{flex:1;padding:12px 14px;border-radius:999px;border:1px solid #e9edf2;background:#fff;font-size:15px;}
+  .composer button{background:var(--accent);color:#fff;border:none;padding:10px 16px;border-radius:12px;cursor:pointer;font-weight:700;}
+
+  /* responsive */
+  @media(max-width:720px){
+    .container{height:92vh;border-radius:12px;}
+    .big-heart{display:none;}
+  }
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div id="roomTitle">Private Chat</div>
-    <div id="roomInfo"></div>
+  <div class="stage">
+    <div class="container" role="main">
+      <div class="big-heart" aria-hidden="true"></div>
+
+      <div class="header">
+        <div>
+          <div class="title" id="roomTitle">Private Chat</div>
+          <div class="sub" id="roomInfo">You: ...</div>
+        </div>
+        <div class="sub" id="connectedInfo">Connected</div>
+      </div>
+
+      <div id="msgsWrap" class="msgs-wrap">
+        <div id="messages" class="messages" aria-live="polite"></div>
+      </div>
+
+      <div class="composer">
+        <input id="m" placeholder="Type a private message..." autocomplete="off" />
+        <button id="send">Send</button>
+      </div>
+    </div>
   </div>
-  <div id="msgs" class="messages"></div>
-  <div class="composer">
-    <input id="m" placeholder="Type a message..." />
-    <button id="send">Send</button>
-  </div>
-</div>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-const params = new URLSearchParams(location.search);
-const room = params.get("room");
-const a = params.get("a");
-const b = params.get("b");
-const me = localStorage.getItem("uid") || ("User-" + Math.floor(10000 + Math.random()*90000));
-localStorage.setItem("uid", me);
+(function(){
+  const params = new URLSearchParams(location.search);
+  const room = params.get("room");
+  const a = params.get("a");
+  const b = params.get("b");
 
-document.getElementById("roomTitle").textContent = "Private: " + (a===me ? b : a);
-document.getElementById("roomInfo").textContent = "You: " + me;
-
-const socket = io("https://wdp-chat.onrender.com");
-socket.emit("userConnected", me);
-
-const msgs = document.getElementById("msgs");
-
-function add(m, cls){
-  const d = document.createElement("div");
-  d.className = "msg " + (cls || "");
-  const meta = document.createElement("div"); meta.className = "meta";
-  meta.textContent = m.from + " • " + (m.timestamp || "");
-  const txt = document.createElement("div"); txt.textContent = m.text;
-  d.appendChild(meta); d.appendChild(txt);
-  msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight;
-}
-
-document.getElementById("send").onclick = ()=> {
-  const text = document.getElementById("m").value.trim();
-  if(!text) return;
-  socket.emit("privateMessage", { from: me, to: (me===a? b : a), text });
-  add({ from: "You", text, timestamp: new Date().toLocaleTimeString() }, "");
-  document.getElementById("m").value = "";
-};
-
-socket.on("privateMessage", m => {
-  if(m.from === me || m.to === me) {
-    add(m, m.from === me ? "" : "other");
+  let me = localStorage.getItem("uid");
+  if(!me){
+    me = "User-" + Math.floor(10000 + Math.random()*90000);
+    localStorage.setItem("uid", me);
   }
-});
+
+  const peer = (me === a ? b : a);
+  document.getElementById("roomTitle").textContent = "Private: " + (peer || "Chat");
+  document.getElementById("roomInfo").textContent = "You: " + me;
+
+  const socket = io("https://wdp-chat.onrender.com");
+  socket.emit("userConnected", me);
+
+  const messages = document.getElementById("messages");
+  const msgsWrap = document.getElementById("msgsWrap");
+  const connectedInfo = document.getElementById("connectedInfo");
+
+  function addMessage(m, cls){
+    const el = document.createElement("div");
+    el.className = "msg " + (cls || "");
+    const who = document.createElement("div");
+    who.className = "who";
+    who.textContent = (m.from === me) ? "You" : m.from;
+    const time = document.createElement("span");
+    time.className="time";
+    time.textContent = m.timestamp || "";
+    who.appendChild(time);
+
+    const text = document.createElement("div");
+    text.textContent = m.text;
+
+    el.appendChild(who);
+    el.appendChild(text);
+    messages.appendChild(el);
+    // scroll to bottom smoothly
+    msgsWrap.scrollTop = messages.scrollHeight;
+  }
+
+  // When sending: do NOT add a local copy. Server will emit privateMessage (to both)
+  document.getElementById("send").onclick = ()=>{
+    const inp = document.getElementById("m");
+    const text = inp.value.trim();
+    if(!text) return;
+    // ensure peer exists
+    const target = peer;
+    if(!target){
+      alert("No peer specified for this private chat.");
+      return;
+    }
+    socket.emit("privateMessage", { from: me, to: target, text: text });
+    inp.value = "";
+  };
+
+  document.getElementById("m").addEventListener("keydown", (e)=>{
+    if(e.key === "Enter") document.getElementById("send").click();
+  });
+
+  // listen for privateMessage from server — display only if relevant (from/to contains me)
+  socket.on("privateMessage", (m)=>{
+    if(!m) return;
+    if(m.from === me || m.to === me){
+      // classify: if from me -> you, else -> them
+      const cls = (m.from === me) ? "you" : "them";
+      addMessage(m, cls);
+    }
+  });
+
+  // small presence / online update
+  socket.on("onlineList", (list)=>{
+    const isOnline = list.includes(peer);
+    connectedInfo.textContent = isOnline ? "Peer online" : "Peer offline";
+  });
+
+  socket.on("connect", ()=> { connectedInfo.textContent = "Connected"; });
+  socket.on("disconnect", ()=> { connectedInfo.textContent = "Disconnected"; });
+
+})();
 </script>
 </body>
 </html>
