@@ -30,6 +30,7 @@ wdp-chat/
 │
 └── frontend/
   ├── index.html
+  ├── dm.html
   └── about.html
 ```
 
