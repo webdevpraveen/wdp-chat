@@ -74,17 +74,6 @@ Render supports WebSockets automatically.
 - Deploy as a static site.
 
 ---
-
-## 🧭 Version History (Semantic Versioning)
-
-| Version | Commit    | Description                                      |
-|---------|-----------|--------------------------------------------------|
-| **v1.0** | `a946698` | Frontend + Backend connected (initial stage)     |
-| **v1.1** | `12472eb` | Backend linking improvements                     |
-| **v2.0** | `bb385e2` | First major feature set added                    |
-| **v2.1** | `912fa0e` | Notification sound added                         |
-| **v2.2** | `e6fc87b` | Online user counter added                        |
-
 🔗 **Full changelog:**  
 https://github.com/webdevpraveen/wdp-chat/releases
 
