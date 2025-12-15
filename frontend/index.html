@@ -115,6 +115,11 @@ body{
   z-index: 9999;
   transition: background 0.3s ease;
 }
+body {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 </style>
 </head>
@@ -272,7 +277,7 @@ let soundReady=false;
 window.addEventListener("click", ()=>{ if(!soundReady){ notif.play().then(()=>{ notif.pause(); notif.currentTime=0; soundReady=true; }).catch(()=>{}); }});
 
 function scrollBottom(){ messages.scrollTop = messages.scrollHeight; }
-function showEvent(text, ttl=1500){ const d=document.createElement("div"); d.className="event"; d.textContent=text; messages.appendChild(d); scrollBottom(); if(ttl) setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); }, ttl); }
+function showEvent(text, ttl=30000){ const d=document.createElement("div"); d.className="event"; d.textContent=text; messages.appendChild(d); scrollBottom(); if(ttl) setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); }, ttl); }
 
 function createBubble(msg){
   const row = document.createElement("div");
@@ -483,6 +488,18 @@ function openReactionPopup(e, message, toggleFn){
 
 window.addEventListener("click", ()=>{ if(document.getElementById("emojiPopup").style.display==="block"){ document.getElementById("emojiPopup").style.display="none"; } });
 let lastPingTime = 0;
+document.addEventListener("contextmenu", function(e){
+  e.preventDefault();
+});
+document.addEventListener("keydown", function(e){
+  if (
+    (e.ctrlKey && ["c","u","s","a"].includes(e.key.toLowerCase())) ||
+    e.key === "F12"
+  ) {
+    e.preventDefault();
+    return false;
+  }
+});
 
 
 </script>
