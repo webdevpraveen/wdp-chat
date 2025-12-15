@@ -8,11 +8,11 @@ A fast, real-time chat application built using **HTML**, **Js**, and **Socket.io
 > <img width="500" height="480" alt="image" src="https://github.com/user-attachments/assets/a9bf0fcc-32e7-49c2-b0f6-703723ed13db" />
 https://wdpchat.vercel.app/
 ---
-
 ## ✨ Key Features
 - ⚡ **Real-time messaging** powered by Socket.io  
 - 👥 **Online users counter** with live updates  
-- 🔔 **Notification sound** for incoming messages  
+- 🔔 [**Notification Sound**](https://github.com/user-attachments/files/24163542/notifications.mp3) for incoming messages
+* for incoming messages  
 - 🧼 **Clean and responsive UI**  
 - 🔗 Fully connected **Frontend ↔ Backend**    
 - 🧱 Simple file architecture — beginner friendly  
