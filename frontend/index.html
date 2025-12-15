@@ -272,7 +272,7 @@ let soundReady=false;
 window.addEventListener("click", ()=>{ if(!soundReady){ notif.play().then(()=>{ notif.pause(); notif.currentTime=0; soundReady=true; }).catch(()=>{}); }});
 
 function scrollBottom(){ messages.scrollTop = messages.scrollHeight; }
-function showEvent(text, ttl=3500){ const d=document.createElement("div"); d.className="event"; d.textContent=text; messages.appendChild(d); scrollBottom(); if(ttl) setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); }, ttl); }
+function showEvent(text, ttl=1500){ const d=document.createElement("div"); d.className="event"; d.textContent=text; messages.appendChild(d); scrollBottom(); if(ttl) setTimeout(()=>{ if(d.parentNode) d.parentNode.removeChild(d); }, ttl); }
 
 function createBubble(msg){
   const row = document.createElement("div");
@@ -395,9 +395,20 @@ document.getElementById("send").onclick = () => {
   socket.emit("stopTyping", userId);
 };
 document.getElementById("input").addEventListener("keydown", e => { if(e.key === "Enter") document.getElementById("send").click(); });
+document.getElementById("emojiBtn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  const ep = document.getElementById("emojiPopup");
+  ep.style.display = ep.style.display === "block" ? "none" : "block";
+});
 
-document.getElementById("emojiBtn").onclick = ()=>{ const ep=document.getElementById("emojiPopup"); ep.style.display = ep.style.display==="block" ? "none" : "block"; };
-document.getElementById("emojiPopup").addEventListener("click", e => { if(e.target.tagName==="SPAN"){ document.getElementById("input").value += e.target.textContent; document.getElementById("emojiPopup").style.display="none"; document.getElementById("input").focus(); } });
+document.getElementById("emojiPopup").addEventListener("click", e => {
+  e.stopPropagation();
+  if(e.target.tagName === "SPAN"){
+    document.getElementById("input").value += e.target.textContent;
+    document.getElementById("emojiPopup").style.display = "none";
+    document.getElementById("input").focus();
+  }
+});
 
 socket.on("dmInviteSent", info => showEvent("Invite sent ("+info.to+")"));
 socket.on("dmInviteFailed", info => alert("Invite failed: "+(info.reason||"unknown")));
