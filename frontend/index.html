@@ -37,12 +37,24 @@ body{
 .msg-button{padding:6px 8px;border-radius:6px;border:1px solid #e6eef6;background:#fff;cursor:pointer;font-size:13px;}
 .admin-panel{padding:10px;display:none;gap:8px;border-bottom:1px solid #e5eaf0;}
 .admin-panel button{padding:6px 12px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:13px;}
-.messages{flex:1;padding:18px;overflow:auto;display:flex;flex-direction:column;gap:12px;}
+.messages{
+  flex:1;
+  padding:18px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  background-image: url('assests/chat-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+}
+
 .event{text-align:center;font-size:13px;color:var(--muted);}
 .msg-row{display:flex;}
 .left{justify-content:flex-start;}
 .right{justify-content:flex-end;}
-.bubble{max-width:75%;padding:10px 14px;border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,0.06);}
+.bubble{max-width:75%;padding:10px 14px;border-radius:var(--radius);box-shadow:0 4px 16px rgba(0,0,0,0.06); backdrop-filter: blur(2px);}
 .self{background:var(--self);}
 .other{background:var(--other);}
 .admin{background:var(--admin);border-left:4px solid #ff6b6b;}
@@ -75,6 +87,35 @@ body{
 .reaction-bar{display:flex;gap:6px;margin-top:6px;}
 .reaction-chip{padding:2px 6px;background:#f0f2f5;border-radius:8px;font-size:13px;}
 @media(max-width:900px){.admin-dashboard{display:none!important}}
+.online-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.online-dot {
+  width: 10px;
+  height: 10px;
+  background: #22c55e; /* green */
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(34,197,94,0.7);
+}
+
+.ping-box {
+  position: fixed;
+  bottom: 12px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 9999;
+  transition: background 0.3s ease;
+}
+
 </style>
 </head>
 <body>
@@ -102,7 +143,7 @@ body{
         <div id="youAre" class="you-are"></div>
       </div>
       <div class="right-wrap">
-        <a href="/about.html" class="about-btn">About</a>
+        <a href="./about.html" class="about-btn">About</a>
       </div>
     </div>
   </div>
@@ -156,7 +197,7 @@ body{
   <div id="dmViewer" class="dm-view"></div>
 </div>
 
-<audio id="notif" src="notification.mp3" preload="auto"></audio>
+<audio id="notif" src="assests/notification.mp3" preload="auto"></audio>
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 
@@ -167,7 +208,35 @@ const socket = io("https://wdp-chat.onrender.com", {
   withCredentials: false
 });
 
-socket.on("connect", ()=>console.log("[SOCKET] connected", socket.id));
+socket.on("connect", () => {
+  console.log("[SOCKET] connected", socket.id);
+
+  const pingBox = document.getElementById("ping");
+  if (!pingBox) return;
+
+  let lastPing = Date.now();
+
+  socket.io.engine.on("pong", () => {
+    const ping = Date.now() - lastPing;
+    pingBox.innerText = `📶 Ping: ${ping} ms`;
+
+    if (ping <= 80) {
+      pingBox.style.background = "#22c55e"; // green
+    } else if (ping <= 150) {
+      pingBox.style.background = "#facc15"; // yellow
+    } else {
+      pingBox.style.background = "#ef4444"; // red
+    }
+  });
+
+  setInterval(() => {
+    if (socket.connected) {
+      lastPing = Date.now();
+      socket.io.engine.ping();
+    }
+  }, 2000);
+});
+
 socket.on("connect_error", e=>console.error("[SOCKET ERROR]", e));
 socket.on("disconnect", ()=>console.log("[SOCKET] disconnected"));
 
@@ -266,14 +335,40 @@ socket.on("userLeftEvent", uid => { showEvent("🔴 "+uid+" left"); });
 socket.on("onlineList", list => {
   document.getElementById("onlineBox").textContent = list.length + " online";
   popupList.innerHTML = "";
+
   list.forEach(u => {
-    const d = document.createElement("div"); d.textContent = u;
-    const btn = document.createElement("button"); btn.className = "msg-button"; btn.textContent = "Message";
-    btn.onclick = () => { if(u === userId) return alert("You can't DM yourself"); socket.emit("dmInvite", { from:userId, to:u }); showEvent("Invite sent to "+u); };
-    d.appendChild(btn);
-    popupList.appendChild(d);
+    const row = document.createElement("div");
+    row.className = "online-user";
+
+    const nameWrap = document.createElement("div");
+    nameWrap.style.display = "flex";
+    nameWrap.style.alignItems = "center";
+    nameWrap.style.gap = "8px";
+
+    const dot = document.createElement("span");
+    dot.className = "online-dot";
+
+    const name = document.createElement("span");
+    name.textContent = u;
+
+    nameWrap.appendChild(dot);
+    nameWrap.appendChild(name);
+
+    const btn = document.createElement("button");
+    btn.className = "msg-button";
+    btn.textContent = "Message";
+    btn.onclick = () => {
+      if (u === userId) return alert("You can't DM yourself");
+      socket.emit("dmInvite", { from: userId, to: u });
+      showEvent("Invite sent to " + u);
+    };
+
+    row.appendChild(nameWrap);
+    row.appendChild(btn);
+    popupList.appendChild(row);
   });
 });
+
 
 function openReactionPopup(e, message, toggleFn){
   const pop = document.getElementById("reactionPopup");
@@ -376,7 +471,10 @@ function openReactionPopup(e, message, toggleFn){
 }
 
 window.addEventListener("click", ()=>{ if(document.getElementById("emojiPopup").style.display==="block"){ document.getElementById("emojiPopup").style.display="none"; } });
+let lastPingTime = 0;
+
 
 </script>
+<div id="ping" class="ping-box">Ping: -- ms</div>
 </body>
 </html>
