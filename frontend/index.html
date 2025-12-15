@@ -60,9 +60,23 @@ body{
 .admin{background:var(--admin);border-left:4px solid #ff6b6b;}
 .welcome{background:var(--welcome);}
 .dm{border:2px dashed rgba(120,80,200,0.12);}
-.meta{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px;}
-.meta-name{font-weight:600;}
-.meta-time{color:var(--muted);}
+.meta{
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
+.meta-name{
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.meta-time{
+  color: var(--muted);
+  font-size: 11px;
+}
+
 .typing{height:18px;padding-left:16px;color:var(--muted)}
 .composer{padding:10px 14px;display:flex;align-items:center;gap:10px;border-top:1px solid #e5eaf0;background:#fafbfd;}
 .composer input{flex:1;padding:12px 16px;border-radius:14px;border:1px solid #cfd6df;background:#fff;font-size:15px;}
