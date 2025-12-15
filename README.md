@@ -29,6 +29,9 @@ wdp-chat/
 │ └── package.json
 │
 └── frontend/
+  ├── assests/
+  │      ├─ chat-bg.png
+  │      └── notifications.mp3
   ├── index.html
   ├── dm.html
   └── about.html
