@@ -51,9 +51,4 @@ wdp-chat/
 ## 🧑‍💻 Contributing
 Contributions are welcome.  
 Create an issue or submit a pull request to improve the project.
-
----
-
-## ⭐ Support
-If you find this helpful, consider giving the repo a ⭐.
 .
