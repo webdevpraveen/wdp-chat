@@ -48,36 +48,6 @@ wdp-chat/
 
 ---
 
-## 🧪 How to Run Locally
-
-### 1️⃣ Clone the repository  
-```bash
-git clone https://github.com/webdevpraveen/wdp-chat.git
-cd wdp-chat
-cd backend
-npm install
-npm start
-```
-## 🌐 Deployment Instructions
-
-### 🚀 Backend Deployment (Render)
-Upload the `backend/` folder as a service.
-
-Set:
-- **Build command:** `npm install`
-- **Start command:** `node server.js`
-
-Render supports WebSockets automatically.
-
----
-
-### 🎯 Frontend Deployment (Vercel)
-- Select the `frontend/` folder during import.
-- No build command required.
-- Deploy as a static site.
-
----
-
 ## 🧑‍💻 Contributing
 Contributions are welcome.  
 Create an issue or submit a pull request to improve the project.
@@ -86,3 +56,4 @@ Create an issue or submit a pull request to improve the project.
 
 ## ⭐ Support
 If you find this helpful, consider giving the repo a ⭐.
+.
