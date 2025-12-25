@@ -12,7 +12,6 @@ https://wdpchat.vercel.app/
 - ⚡ **Real-time messaging** powered by Socket.io  
 - 👥 **Online users counter** with live updates  
 - 🔔 [**Notification Sound**](https://github.com/user-attachments/files/24163542/notifications.mp3) for incoming messages
-* for incoming messages  
 - 🧼 **Clean and responsive UI**  
 - 🔗 Fully connected **Frontend ↔ Backend**    
 - 🧱 Simple file architecture — beginner friendly  
@@ -51,4 +50,5 @@ wdp-chat/
 ## 🧑‍💻 Contributing
 Contributions are welcome.  
 Create an issue or submit a pull request to improve the project.
+.
 .
