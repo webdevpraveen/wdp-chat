@@ -77,10 +77,6 @@ Render supports WebSockets automatically.
 - Deploy as a static site.
 
 ---
-🔗 **Full changelog:**  
-https://github.com/webdevpraveen/wdp-chat/releases
-
----
 
 ## 🧑‍💻 Contributing
 Contributions are welcome.  
