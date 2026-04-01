@@ -3,112 +3,145 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>About Us</title>
+<title>About Us | SRMU Web Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    body{
-        margin:0;
-        background:#eef0f4;
-        font-family: "Inter", Arial, sans-serif;
-        display:flex;
-        justify-content:center;
-        padding:40px 16px;
-        color:#222;
+    :root {
+        --bg: #f8fafc;
+        --panel: #ffffff;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --text: #1e293b;
+        --muted: #64748b;
+        --border: #e2e8f0;
+        --radius: 20px;
     }
 
-    .container{
-        background:#fff;
-        width:100%;
-        max-width:720px;
-        padding:35px;
-        border-radius:16px;
-        box-shadow:0 10px 28px rgba(0,0,0,0.10);
-        animation: fadeIn 0.3s ease;
+    body {
+        margin: 0;
+        background: var(--bg);
+        background-image: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05), transparent 40%),
+                          radial-gradient(circle at 100% 100%, rgba(236, 72, 153, 0.05), transparent 40%);
+        font-family: "Inter", sans-serif;
+        display: flex;
+        justify-content: center;
+        padding: 60px 20px;
+        color: var(--text);
+        min-height: 100vh;
+        line-height: 1.6;
+    }
+
+    .container {
+        background: var(--panel);
+        width: 100%;
+        max-width: 760px;
+        padding: 48px;
+        border-radius: var(--radius);
+        box-shadow: 0 20px 50px -12px rgba(0,0,0,0.08);
+        border: 1px solid var(--border);
+        animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     @keyframes fadeIn {
-        from {opacity:0; transform: translateY(10px);}
-        to {opacity:1; transform: translateY(0);}
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
-    h1{
-        font-size:30px;
-        margin-bottom:18px;
-        text-align:center;
-        color:#111;
-        letter-spacing:-0.5px;
+    h1 {
+        font-size: 36px;
+        margin-bottom: 24px;
+        text-align: center;
+        color: #0f172a;
+        letter-spacing: -1px;
+        font-weight: 800;
     }
 
-    h2{
-        margin-top:28px;
-        font-size:20px;
-        color:#222;
-        border-left:4px solid #4b7bec;
-        padding-left:10px;
+    h2 {
+        margin-top: 40px;
+        font-size: 20px;
+        color: #0f172a;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    h2::before {
+        content: "";
+        width: 4px;
+        height: 20px;
+        background: var(--accent);
+        border-radius: 2px;
     }
 
-    p{
-        line-height:1.7;
-        margin:10px 0;
-        font-size:16px;
-        color:#333;
+    p {
+        margin: 14px 0;
+        font-size: 16px;
+        color: #475569;
     }
 
-    .section{
-        margin-bottom:25px;
+    .section {
+        margin-bottom: 30px;
     }
 
-    .btn-back{
-        margin-top:25px;
-        display:inline-block;
-        padding:10px 18px;
-        background:#4b7bec;
-        color:#fff;
-        text-decoration:none;
-        border-radius:8px;
-        font-size:16px;
-        transition:0.2s ease;
+    .btn-back {
+        margin-top: 40px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: #f1f5f9;
+        color: #475569;
+        text-decoration: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.2s;
+        border: 1px solid var(--border);
     }
 
-    .btn-back:hover{
-        background:#3867d6;
+    .btn-back:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+        transform: translateX(-4px);
     }
 
-    .github-banner{
-        margin-top:35px;
-        width:100%;
-        background:#000;
-        color:#fff;
-        text-align:center;
-        padding:16px 12px;
-        border-radius:10px;
-        font-size:17px;
-        cursor:pointer;
-        transition:0.2s ease;
-        text-decoration:none;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        gap:10px;
+    .github-banner {
+        margin-top: 48px;
+        width: 100%;
+        background: #0f172a;
+        color: #fff;
+        text-align: center;
+        padding: 18px;
+        border-radius: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 10px 20px -10px rgba(15, 23, 42, 0.5);
     }
 
-    .github-banner:hover{
-        background:#333;
+    .github-banner:hover {
+        background: #1e293b;
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -10px rgba(15, 23, 42, 0.6);
     }
 
-    .github-icon{
-        width:22px;
-        height:22px;
-        fill:white;
+    .github-icon {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
     }
 
-    @media(max-width:480px){
-        .container{
-            padding:25px;
-        }
-        h1{
-            font-size:26px;
-        }
+    @media(max-width: 600px) {
+        .container { padding: 32px 24px; }
+        h1 { font-size: 28px; }
     }
 </style>
 
@@ -117,47 +150,45 @@
 
 <div class="container">
 
-    <h1><u>About Us</u></h1>
+    <h1>About Us</h1>
 
     <div class="section">
         <h2>Short Intro</h2>
-        <p>This website is designed for completely anonymous chatting.</p>
-        <p>No accounts, no email, no phone number - nothing is required.</p>
-        <p>No personal data is collected at any point.</p>
-        <p>Chats are not stored, and every user connects with a random ID.</p>
+        <p>SRMU Web Chat is a minimal, fast, and completely anonymous platform designed for open communication.</p>
+        <p>We believe in privacy by default. No accounts, emails, or phone numbers are ever required to start chatting.</p>
+        <p>Every session is temporary, and you're assigned a unique random ID each time you connect.</p>
     </div>
 
     <div class="section">
         <h2>Privacy Policy</h2>
-        <p>We do not store any chat messages on our server.</p>
-        <p>We do not collect any personal details, identity information, or device data.</p>
-        <p>Connections happen through temporary WebSocket sessions that end as soon as the user disconnects.</p>
-        <p>No tracking, analytics, cookies, or activity logging is used.</p>
+        <p>Your privacy is our priority. We do not store chat messages on our servers permanently.</p>
+        <p>We do not collect personal identifiers, IP addresses in logs, or device fingerprints.</p>
+        <p>Connections are powered by secure WebSockets, and data exists only in-memory during active sessions.</p>
+        <p>No cookies, no trackers, and no third-party analytics are used here.</p>
     </div>
 
     <div class="section">
-        <h2>Terms & Usage Disclaimer</h2>
-        <p>Any illegal or harmful activities are strictly prohibited.</p>
-        <p>Users are fully responsible for their own actions and messages.</p>
-        <p>This platform is only a communication tool - the responsibility for misuse lies entirely with the user.</p>
-        <p>The website owner is not liable for any misuse, harm, or consequences caused by user behavior.</p>
+        <h2>Terms of Use</h2>
+        <p>This platform is a tool for free speech and connection. However, illegal activities, harassment, and harmful behavior are strictly prohibited.</p>
+        <p>Users are solely responsible for the content they share. The developer is not liable for any misuse of the platform.</p>
+        <p>Please maintain a respectful environment for everyone.</p>
     </div>
 
     <div class="section">
-        <h2>Note</h2>
-        <p>This system is built to support open, simple, and barrier-free communication.  
-        Being anonymous does not give anyone the right to disrespect or harm others - please chat responsibly.</p>
+        <h2>Technology</h2>
+        <p>Built with Node.js, Express, Socket.io, and Vanilla HTML/CSS/JS. Hosted on Render (Backend) and Vercel (Frontend).</p>
     </div>
 
-    
-    <a href="/index.html" class="btn-back">← Back to Homepage</a>
+    <a href="./index.html" class="btn-back">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Back to Chat
+    </a>
 
-    
     <a href="https://github.com/webdevpraveen" target="_blank" class="github-banner">
         <svg class="github-icon" viewBox="0 0 16 16">
             <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.07.55-.17.55-.38v-1.33c-2.23.49-2.7-1.07-2.7-1.07-.36-.92-.89-1.17-.89-1.17-.73-.5.06-.49.06-.49.81.06 1.23.83 1.23.83.72 1.23 1.88.88 2.34.67.07-.52.28-.88.51-1.08-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.13 0 0 .67-.21 2.2.82A7.68 7.68 0 018 4.69c.68.003 1.37.09 2.01.27 1.53-1.04 2.2-.82 2.2-.82.44 1.11.16 1.93.08 2.13.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.45.55.38A8 8 0 008 0z"/>
         </svg>
-        Visit Developer's GitHub
+        Designed by WebDevPraveen
     </a>
 
 </div>
