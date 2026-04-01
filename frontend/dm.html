@@ -1,77 +1,109 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Private Chat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg1: #fff0f4;
-    --panel: #ffffff;
-    --you: #dff7de;
-    --other: #eaf2ff;
-    --accent: #ff6b9a;
-    --muted: #6b7280;
-    --radius: 12px;
+  :root {
+    --bg: #f8fafc;
+    --panel: rgba(255, 255, 255, 0.9);
+    --you: #e0f2fe;
+    --other: #ffffff;
+    --accent: #a855f7;
+    --accent-hover: #9333ea;
+    --muted: #64748b;
+    --text: #0f172a;
+    --border: #e2e8f0;
+    --radius: 16px;
+    --shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
   }
-  html,body{
-    height:100%;margin:0;font-family:Inter,Arial;color:#111827;
-    background:linear-gradient(180deg,#fffafc 0%, #fff9fb 50%);
+  
+  html, body {
+    height: 100%; margin: 0; font-family: 'Inter', sans-serif; color: var(--text);
+    background: var(--bg);
+    background-image: radial-gradient(circle at 10% 20%, rgba(168, 85, 247, 0.08), transparent 30%),
+                      radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.08), transparent 30%);
+    overflow: hidden;
   }
-  .stage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-  .container{
-    width:100%;max-width:980px;height:85vh;background:var(--panel);
-    border-radius:14px;box-shadow:0 18px 50px rgba(16,24,40,0.08);
-    position:relative;overflow:hidden;
+  
+  .stage { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  
+  .container {
+    width: 100%; max-width: 800px; height: 88vh; background: var(--panel);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius); box-shadow: var(--shadow);
+    position: relative; overflow: hidden; display: flex; flex-direction: column;
   }
-  .container::before{
-    content:"";position:absolute;inset:0;
-    background: radial-gradient(circle at 20% 20%, rgba(255,110,140,0.05) 0 8%, transparent 10%),
-                radial-gradient(circle at 80% 80%, rgba(255,110,140,0.04) 0 10%, transparent 12%);
-    pointer-events:none;
+  
+  .big-heart {
+    position: absolute; right: 10%; top: 10%; width: 250px; height: 250px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path fill="%23f3e8ff" d="M23.6 .6c-2.7 0-4.9 1.9-5.6 3.6-.7-1.7-3-3.6-5.6-3.6C6.9 .6 4 4 4 8.1 4 16.3 16 24 16 24s12-7.7 12-15.9c0-4.1-2.9-7.5-4.4-7.5z"/></svg>') center/contain no-repeat;
+    opacity: 0.5; transform: rotate(-5deg); pointer-events: none; z-index: -1;
   }
-  .big-heart{
-    position:absolute;right:12%;top:6%;width:320px;height:320px;
-    background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 29"><path fill="%23ffd5e1" d="M23.6 .6c-2.7 0-4.9 1.9-5.6 3.6-.7-1.7-3-3.6-5.6-3.6C6.9 .6 4 4 4 8.1 4 16.3 16 24 16 24s12-7.7 12-15.9c0-4.1-2.9-7.5-4.4-7.5z"/></svg>') center/contain no-repeat;
-    opacity:0.10;transform:rotate(-10deg);pointer-events:none;
+  
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.5); z-index: 10;
   }
-  .header{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:14px 18px;border-bottom:1px solid #f0f2f6;
+  
+  .title { font-weight: 700; font-size: 18px; color: #1e293b; }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-weight: 500;}
+  
+  .connected-status {
+    padding: 6px 14px; background: #fff; border: 1px solid var(--border);
+    border-radius: 99px; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;
+    color: var(--muted);
   }
-  .title{font-weight:700;font-size:18px;}
-  .sub{color:var(--muted);font-size:13px;}
-
-  .msgs-wrap{padding:14px;height:calc(100% - 140px);overflow:auto;}
-  .messages{display:flex;flex-direction:column;gap:10px;max-width:100%;}
-  .meta{font-size:12px;color:var(--muted);margin-bottom:6px;}
-
-  .msg{
-    max-width:78%;padding:10px 14px;border-radius:12px;
-    box-shadow:0 6px 18px rgba(16,24,40,0.04);word-break:break-word;
+  
+  .msgs-wrap { flex: 1; padding: 20px; overflow-y: auto; scroll-behavior: smooth; }
+  .messages { display: flex; flex-direction: column; gap: 14px; max-width: 100%; }
+  
+  .msg {
+    max-width: 75%; padding: 12px 16px; border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03); word-break: break-word; font-size: 15px;
+    line-height: 1.5; animation: slideUp 0.3s ease;
   }
-  .you{align-self:flex-end;background:var(--you);border-bottom-right-radius:6px;}
-  .them{align-self:flex-start;background:var(--other);border-bottom-left-radius:6px;}
-
-  .msg .who{font-weight:700;margin-bottom:6px;font-size:13px;}
-  .msg .time{font-size:11px;color:var(--muted);float:right;margin-left:10px;}
-
-  .composer{
-    display:flex;gap:10px;padding:12px;border-top:1px solid #f0f2f6;
-    background:linear-gradient(180deg,#fff,#fff);align-items:center;
+  @keyframes slideUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+  
+  .you { align-self: flex-end; background: var(--you); border-bottom-right-radius: 4px; border: 1px solid #bae6fd; }
+  .them { align-self: flex-start; background: #fff; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+  
+  .msg .who { font-weight: 600; margin-bottom: 6px; font-size: 13px; color: #0f172a; }
+  .msg .time { font-size: 11px; color: var(--muted); float: right; margin-left: 10px; font-weight: 400; }
+  
+  .composer {
+    display: flex; gap: 12px; padding: 16px 20px; border-top: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.8); align-items: center;
   }
-  .composer input{
-    flex:1;padding:12px 14px;border-radius:999px;border:1px solid #e9edf2;
-    background:#fff;font-size:15px;
+  
+  .composer input {
+    flex: 1; padding: 14px 20px; border-radius: 99px; border: 1px solid var(--border);
+    background: #f1f5f9; font-size: 15px; outline: none; transition: all 0.2s;
   }
-  .composer button{
-    background:var(--accent);color:#fff;border:none;padding:10px 16px;
-    border-radius:12px;cursor:pointer;font-weight:700;
+  .composer input:focus { border-color: var(--accent); background: #fff; box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1); }
+  
+  .composer button {
+    background: var(--accent); color: #fff; border: none; padding: 14px 24px;
+    border-radius: 99px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
   }
-
-  @media(max-width:720px){
-    .container{height:92vh;border-radius:12px;}
-    .big-heart{display:none;}
+  .composer button:hover { background: var(--accent-hover); transform: translateY(-1px); }
+  
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  
+  @media(max-width: 720px) {
+    .container { height: 100vh; border-radius: 0; max-width: 100%; border: none; }
+    .stage { padding: 0; }
+    .big-heart { right: 0; top: 0; opacity: 0.3; }
   }
 </style>
 </head>
@@ -85,7 +117,7 @@
           <div class="title" id="roomTitle">Private Chat</div>
           <div class="sub" id="roomInfo">You: ...</div>
         </div>
-        <div class="sub" id="connectedInfo">Connecting...</div>
+        <div class="connected-status" id="connectedInfo">Connecting...</div>
       </div>
 
       <div id="msgsWrap" class="msgs-wrap">
@@ -103,13 +135,11 @@
 <script>
 (function(){
 
-  /* === Parse URL parameters === */
   const params = new URLSearchParams(location.search);
   const room = params.get("room");
   const a = params.get("a");
   const b = params.get("b");
 
-  /* === Load user ID === */
   let me = localStorage.getItem("uid");
   if(!me){
     me = "User-" + Math.floor(10000 + Math.random()*90000);
@@ -121,29 +151,33 @@
   document.getElementById("roomTitle").textContent = "Private: " + (peer || "Chat");
   document.getElementById("roomInfo").textContent = "You: " + me;
 
-  /* === FIXED SOCKET CONNECTION (Render Compatible) === */
-  const socket = io("https://wdp-chat.onrender.com", {
+  // Dynamic Socket URL setup
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const SOCKET_URL = isLocal ? 'http://localhost:3000' : 'https://wdp-chat.onrender.com';
+
+  const socket = io(SOCKET_URL, {
     transports: ["websocket", "polling"],
     path: "/socket.io",
     withCredentials: false
   });
 
   socket.on("connect", () => {
-    document.getElementById("connectedInfo").textContent = "Connected";
+    const ci = document.getElementById("connectedInfo");
+    ci.innerHTML = "<span style='display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;'></span> Connected";
     console.log("[DM] Connected", socket.id);
   });
 
   socket.on("disconnect", () => {
-    document.getElementById("connectedInfo").textContent = "Disconnected";
+    const ci = document.getElementById("connectedInfo");
+    ci.innerHTML = "<span style='display:inline-block;width:8px;height:8px;background:#ef4444;border-radius:50%;'></span> Disconnected";
   });
 
-  /* Register user */
   socket.emit("userConnected", me);
 
   const messages = document.getElementById("messages");
   const msgsWrap = document.getElementById("msgsWrap");
 
-  function addMessage(m, cls){
+  function addMessage(m, cls) {
     const el = document.createElement("div");
     el.className = "msg " + cls;
 
@@ -166,40 +200,36 @@
     msgsWrap.scrollTop = messages.scrollHeight;
   }
 
-  /* SEND PRIVATE MESSAGE */
   document.getElementById("send").onclick = () => {
     const inp = document.getElementById("m");
     const text = inp.value.trim();
     if(!text) return;
 
-    socket.emit("privateMessage", {
-      from: me,
-      to: peer,
-      text: text
-    });
-
+    socket.emit("privateMessage", { from: me, to: peer, text: text });
     inp.value = "";
+    inp.focus();
   };
 
-  document.getElementById("m").addEventListener("keydown", (e)=>{
+  document.getElementById("m").addEventListener("keydown", (e) => {
     if(e.key === "Enter") document.getElementById("send").click();
   });
 
-  /* RECEIVE PRIVATE MESSAGE */
-  socket.on("privateMessage", (m)=>{
+  socket.on("privateMessage", (m) => {
     if(!m) return;
-
     if(m.from === me || m.to === me){
       const cls = (m.from === me) ? "you" : "them";
       addMessage(m, cls);
     }
   });
 
-  /* PEER ONLINE/OFFLINE STATUS */
-  socket.on("onlineList", list=>{
+  socket.on("onlineList", list => {
     const isOnline = list.includes(peer);
-    document.getElementById("connectedInfo").textContent =
-      isOnline ? "Peer online" : "Peer offline";
+    const ci = document.getElementById("connectedInfo");
+    if(isOnline) {
+      ci.innerHTML = "<span style='display:inline-block;width:8px;height:8px;background:#22c55e;border-radius:50%;'></span> Peer Online";
+    } else {
+      ci.innerHTML = "<span style='display:inline-block;width:8px;height:8px;background:#cbd5e1;border-radius:50%;'></span> Peer Offline";
+    }
   });
 
 })();
