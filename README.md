@@ -4,21 +4,21 @@ A fast, real-time chat application built using **HTML**, **Js**, and **Socket.io
 
 ---
 
-## 📸 Preview
+## Preview
 > <img width="500" height="480" alt="image" src="https://github.com/user-attachments/assets/a9bf0fcc-32e7-49c2-b0f6-703723ed13db" />
 https://wdpchat.vercel.app/
 ---
-## ✨ Key Features
-- ⚡ **Real-time messaging** powered by Socket.io  
-- 👥 **Online users counter** with live updates  
-- 🔔 [**Notification Sound**](https://github.com/user-attachments/files/24163542/notifications.mp3) for incoming messages
-- 🧼 **Clean and responsive UI**  
-- 🔗 Fully connected **Frontend ↔ Backend**    
-- 🧱 Simple file architecture — beginner friendly  
+## Key Features
+-  **Real-time messaging** powered by Socket.io  
+-  **Online users counter** with live updates  
+-  [**Notification Sound**](https://github.com/user-attachments/files/24163542/notifications.mp3) for incoming messages
+-  **Clean and responsive UI**  
+-  Fully connected **Frontend ↔ Backend**    
+-  Simple file architecture — beginner friendly  
 
 ---
 
-## 📂 Project Structure
+##  Project Structure
 
 ```bash
 wdp-chat/
@@ -39,7 +39,7 @@ wdp-chat/
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Frontend:** HTML, CSS, JavaScript  
 - **Backend:** Node.js  
 - **Real-time Engine:** Socket.io  
@@ -47,7 +47,7 @@ wdp-chat/
 
 ---
 
-## 🧑‍💻 Contributing
+##  Contributing
 Contributions are welcome.  
 Create an issue or submit a pull request to improve the project.
 .
